@@ -143,6 +143,20 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <div>
         <div class="page-title">Orders</div>
         <div class="page-sub">All customer orders from all devices</div>
+<br>
+
+<button onclick="clearOrders()"
+style="
+padding:10px 20px;
+background:red;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-bottom:15px;
+">
+Clear Order History
+</button>
       </div>
       <button class="btn-add" style="background:var(--charcoal);color:var(--gold);border:1px solid var(--border)" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Refresh</button>
     </div>
@@ -426,6 +440,24 @@ async function updateOrderStatus(id, status) {
 }
 
 // Init
+async function clearOrders(){
+
+  const confirmDelete =
+  confirm("Delete all order history?");
+
+  if(!confirmDelete) return;
+
+  await db(
+    'DELETE',
+    'orders',
+    null,
+    'id=neq.0'
+  );
+
+  toast('All orders cleared');
+
+  loadOrders();
+}
 loadDashboard();
 </script>
 </body>
