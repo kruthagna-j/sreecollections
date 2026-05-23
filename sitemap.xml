@@ -1,21 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
   <url>
     <loc>https://sreecollectionsknl.vercel.app/</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2025-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Collections / Shop -->
   <url>
     <loc>https://sreecollectionsknl.vercel.app/collections.html</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- Category: Birthday -->
   <url>
-    <loc>https://sreecollectionsknl.vercel.app/admin.html</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://sreecollectionsknl.vercel.app/collections.html?category=Birthday</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Category: Wedding -->
+  <url>
+    <loc>https://sreecollectionsknl.vercel.app/collections.html?category=Wedding</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Category: Anniversary -->
+  <url>
+    <loc>https://sreecollectionsknl.vercel.app/collections.html?category=Anniversary</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Category: Corporate -->
+  <url>
+    <loc>https://sreecollectionsknl.vercel.app/collections.html?category=Corporate</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Category: Festivals -->
+  <url>
+    <loc>https://sreecollectionsknl.vercel.app/collections.html?category=Festivals</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Category: Baby Shower -->
+  <url>
+    <loc>https://sreecollectionsknl.vercel.app/collections.html?category=Baby+Shower</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Category: Retirement -->
+  <url>
+    <loc>https://sreecollectionsknl.vercel.app/collections.html?category=Retirement</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+
 </urlset>
