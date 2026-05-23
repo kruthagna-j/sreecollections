@@ -1,11 +1,21 @@
-cat > /mnt/user-data/outputs/sree-collections/collections.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shop Gifts – Sree Collections Kurnool</title>
-<meta name="description" content="Shop premium gifts online at Sree Collections, Kurnool. Birthday, wedding, anniversary gifts with easy online ordering.">
+<meta name="description" content="Shop premium gifts online at Sree Collections, Kurnool. Birthday, wedding, anniversary, corporate gifts with easy online ordering and UPI payment.">
+<meta name="robots" content="index, follow">
+
+<!-- ✅ FIXED: canonical now points to Vercel -->
+<link rel="canonical" href="https://sreecollectionsknl.vercel.app/collections.html">
+
+<!-- ✅ FIXED: og:url now points to Vercel -->
+<meta property="og:title" content="Shop Gifts – Sree Collections Kurnool">
+<meta property="og:description" content="Shop premium gifts online at Sree Collections, Kurnool. 500+ varieties.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sreecollectionsknl.vercel.app/collections.html">
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -87,119 +97,118 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:fl
 <body>
 
 <nav>
-  <a href="index.html" class="logo">Sree Collections</a>
-  <div style="display:flex;align-items:center;gap:1.5rem">
-    <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Home</a>
-    <a href="admin-login.html" class="nav-back" style="font-size:0.78rem;color:rgba(200,169,107,0.5)"><i class="fas fa-lock"></i> Admin</a>
-  </div>
+<a href="index.html" class="logo">Sree Collections</a>
+<div style="display:flex;align-items:center;gap:1.5rem">
+<a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Home</a>
+<a href="admin-login.html" class="nav-back" style="font-size:0.78rem;color:rgba(200,169,107,0.5)"><i class="fas fa-lock"></i> Admin</a>
+</div>
 </nav>
 
 <div class="page-header">
-  <h1 id="pageTitle">Our Gift Collections</h1>
-  <p>Premium gifts for every occasion · Order online · Pay securely</p>
+<h1 id="pageTitle">Our Gift Collections</h1>
+<p>Premium gifts for every occasion · Order online · Pay securely</p>
 </div>
 
 <div class="filter-bar">
-  <button class="filter-btn active" onclick="filterProducts('All',this)">All</button>
-  <button class="filter-btn" onclick="filterProducts('Birthday',this)">🎂 Birthday</button>
-  <button class="filter-btn" onclick="filterProducts('Wedding',this)">💍 Wedding</button>
-  <button class="filter-btn" onclick="filterProducts('Anniversary',this)">❤️ Anniversary</button>
-  <button class="filter-btn" onclick="filterProducts('Corporate',this)">💼 Corporate</button>
-  <button class="filter-btn" onclick="filterProducts('Festivals',this)">🪔 Festivals</button>
-  <button class="filter-btn" onclick="filterProducts('Baby Shower',this)">👶 Baby Shower</button>
-  <button class="filter-btn" onclick="filterProducts('Retirement',this)">🏆 Retirement</button>
+<button class="filter-btn active" onclick="filterProducts('All',this)">All</button>
+<button class="filter-btn" onclick="filterProducts('Birthday',this)">🎂 Birthday</button>
+<button class="filter-btn" onclick="filterProducts('Wedding',this)">💍 Wedding</button>
+<button class="filter-btn" onclick="filterProducts('Anniversary',this)">❤️ Anniversary</button>
+<button class="filter-btn" onclick="filterProducts('Corporate',this)">💼 Corporate</button>
+<button class="filter-btn" onclick="filterProducts('Festivals',this)">🪔 Festivals</button>
+<button class="filter-btn" onclick="filterProducts('Baby Shower',this)">👶 Baby Shower</button>
+<button class="filter-btn" onclick="filterProducts('Retirement',this)">🏆 Retirement</button>
 </div>
 
 <div class="products-section">
-  <div class="loading" id="loading"><i class="fas fa-spinner"></i><br><br>Loading products...</div>
-  <div class="products-grid" id="productsGrid"></div>
-  <div class="no-products" id="noProducts" style="display:none">
-    <i class="fas fa-box-open" style="font-size:3rem;color:var(--gold);display:block;margin-bottom:1rem"></i>
-    No products found in this category yet.<br>
-    <a href="https://wa.me/917207186844" target="_blank" style="color:var(--gold)">Contact us on WhatsApp</a> to enquire.
-  </div>
+<div class="loading" id="loading"><i class="fas fa-spinner"></i><br><br>Loading products...</div>
+<div class="products-grid" id="productsGrid"></div>
+<div class="no-products" id="noProducts" style="display:none">
+<i class="fas fa-box-open" style="font-size:3rem;color:var(--gold);display:block;margin-bottom:1rem"></i>
+No products found in this category yet.<br>
+<a href="https://wa.me/917207186844" target="_blank" style="color:var(--gold)">Contact us on WhatsApp</a> to enquire.
+</div>
 </div>
 
 <!-- ORDER MODAL -->
 <div class="modal-overlay" id="orderModal">
-  <div class="modal">
-    <h2>Place Order</h2>
-    <div class="modal-product">
-      <div>
-        <div class="modal-product-name" id="modalProductName"></div>
-        <div style="font-size:0.8rem;color:var(--muted)" id="modalProductCategory"></div>
-      </div>
-      <div class="modal-product-price" id="modalProductPrice"></div>
-    </div>
-    <div class="form-group">
-      <label>Your Name *</label>
-      <input type="text" id="custName" placeholder="Enter your full name">
-    </div>
-    <div class="form-group">
-      <label>Phone Number *</label>
-      <input type="tel" id="custPhone" placeholder="+91 XXXXX XXXXX">
-    </div>
-    <div class="form-group">
-      <label>Email Address <span style="color:var(--gold);font-size:0.7rem">(for invoice)</span></label>
-      <input type="email" id="custEmail" placeholder="your@email.com">
-    </div>
-    <div class="form-group">
-      <label>Delivery Address</label>
-      <textarea id="custAddress" rows="2" placeholder="Enter address (optional – for delivery)"></textarea>
-    </div>
-    <div class="form-group">
-      <label>Quantity</label>
-      <div class="qty-control">
-        <button class="qty-btn" onclick="changeQty(-1)">−</button>
-        <span class="qty-val" id="qtyVal">1</span>
-        <button class="qty-btn" onclick="changeQty(1)">+</button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Payment Method</label>
-      <div class="payment-methods">
-        <div class="payment-method selected" id="pm-cod" onclick="selectPayment('cod')">
-          <i class="fas fa-money-bill-wave"></i>
-          <span>Cash on Delivery</span>
-        </div>
-        <div class="payment-method" id="pm-online" onclick="selectPayment('online')">
-          <i class="fas fa-credit-card"></i>
-          <span>Pay Online (UPI/Card)</span>
-        </div>
-      </div>
-    </div>
-    <div class="modal-total">
-      <span>Total Amount</span>
-      <strong id="modalTotal">₹0</strong>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-confirm" id="confirmBtn" onclick="confirmOrder()">
-        <i class="fas fa-shopping-bag"></i> Confirm Order
-      </button>
-    </div>
-  </div>
+<div class="modal">
+<h2>Place Order</h2>
+<div class="modal-product">
+<div>
+<div class="modal-product-name" id="modalProductName"></div>
+<div style="font-size:0.8rem;color:var(--muted)" id="modalProductCategory"></div>
+</div>
+<div class="modal-product-price" id="modalProductPrice"></div>
+</div>
+<div class="form-group">
+<label>Your Name *</label>
+<input type="text" id="custName" placeholder="Enter your full name">
+</div>
+<div class="form-group">
+<label>Phone Number *</label>
+<input type="tel" id="custPhone" placeholder="+91 XXXXX XXXXX">
+</div>
+<div class="form-group">
+<label>Email Address <span style="color:var(--gold);font-size:0.7rem">(for invoice)</span></label>
+<input type="email" id="custEmail" placeholder="your@email.com">
+</div>
+<div class="form-group">
+<label>Delivery Address</label>
+<textarea id="custAddress" rows="2" placeholder="Enter address (optional – for delivery)"></textarea>
+</div>
+<div class="form-group">
+<label>Quantity</label>
+<div class="qty-control">
+<button class="qty-btn" onclick="changeQty(-1)">−</button>
+<span class="qty-val" id="qtyVal">1</span>
+<button class="qty-btn" onclick="changeQty(1)">+</button>
+</div>
+</div>
+<div class="form-group">
+<label>Payment Method</label>
+<div class="payment-methods">
+<div class="payment-method selected" id="pm-cod" onclick="selectPayment('cod')">
+<i class="fas fa-money-bill-wave"></i>
+<span>Cash on Delivery</span>
+</div>
+<div class="payment-method" id="pm-online" onclick="selectPayment('online')">
+<i class="fas fa-credit-card"></i>
+<span>Pay Online (UPI/Card)</span>
+</div>
+</div>
+</div>
+<div class="modal-total">
+<span>Total Amount</span>
+<strong id="modalTotal">₹0</strong>
+</div>
+<div class="modal-btns">
+<button class="btn-cancel" onclick="closeModal()">Cancel</button>
+<button class="btn-confirm" id="confirmBtn" onclick="confirmOrder()">
+<i class="fas fa-shopping-bag"></i> Confirm Order
+</button>
+</div>
+</div>
 </div>
 
 <!-- SUCCESS -->
 <div class="success-overlay" id="successOverlay">
-  <div class="success-box">
-    <div class="success-icon" id="successIcon">✅</div>
-    <h2 id="successTitle">Order Placed!</h2>
-    <p id="successMsg"></p>
-    <div class="order-id-badge" id="successOrderId"></div>
-    <div class="email-status" id="emailStatus"></div>
-    <div class="success-actions">
-      <button class="btn-invoice" id="invoiceBtn" onclick="downloadInvoice()" style="display:none">
-        <i class="fas fa-download"></i> Download Invoice
-      </button>
-      <button class="btn-done" onclick="document.getElementById('successOverlay').classList.remove('active')">Continue Shopping</button>
-    </div>
-  </div>
+<div class="success-box">
+<div class="success-icon" id="successIcon">✅</div>
+<h2 id="successTitle">Order Placed!</h2>
+<p id="successMsg"></p>
+<div class="order-id-badge" id="successOrderId"></div>
+<div class="email-status" id="emailStatus"></div>
+<div class="success-actions">
+<button class="btn-invoice" id="invoiceBtn" onclick="downloadInvoice()" style="display:none">
+<i class="fas fa-download"></i> Download Invoice
+</button>
+<button class="btn-done" onclick="document.getElementById('successOverlay').classList.remove('active')">Continue Shopping</button>
+</div>
+</div>
 </div>
 
 <script>
-// Config
 const SUPABASE_URL = 'https://peqqtfvypljvgcorddbn.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlcXF0ZnZ5cGxqdmdjb3JkZGJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNDU1OTAsImV4cCI6MjA5NDgyMTU5MH0.J364P7n9HazV0F8Bd9o_OKBsfKbfLAbW1vCRjIflLtE';
 const RZP_KEY = 'rzp_test_SrsY668SBTZFfn';
@@ -208,7 +217,6 @@ const EMAILJS_SERVICE_ID = 'service_fxctnxu';
 const EMAILJS_TEMPLATE_ID = 'template_detul3i';
 const OWNER_EMAIL = '2103iare@gmail.com';
 
-// Init EmailJS
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
 let allProducts = [];
@@ -217,7 +225,6 @@ let currentQty = 1;
 let currentPayment = 'cod';
 let lastOrder = null;
 
-// Supabase helper
 async function sbFetch(method, table, body, filter) {
   let url = `${SUPABASE_URL}/rest/v1/${table}`;
   if (filter) url += `?${filter}`;
@@ -238,19 +245,16 @@ async function sbFetch(method, table, body, filter) {
   } catch(e) { console.error('Fetch error:', e); return null; }
 }
 
-// Load products
 async function loadProducts() {
   const loading = document.getElementById('loading');
   const products = await sbFetch('GET', 'products', null, 'in_stock=eq.true&order=created_at.desc');
   loading.style.display = 'none';
-
   if (!products) {
     document.getElementById('noProducts').innerHTML = '<i class="fas fa-exclamation-circle" style="font-size:2rem;color:#e74c3c;display:block;margin-bottom:1rem"></i>Could not load products. Please check connection.<br><br><button onclick="location.reload()" style="background:var(--gold);color:var(--dark);border:none;padding:0.6rem 1.5rem;cursor:pointer;font-family:Manrope,sans-serif;font-weight:700;margin-top:0.5rem">Retry</button>';
     document.getElementById('noProducts').style.display = 'block';
     return;
   }
   if (products.length === 0) { document.getElementById('noProducts').style.display = 'block'; return; }
-
   allProducts = products;
   const urlParams = new URLSearchParams(window.location.search);
   const cat = urlParams.get('category');
@@ -312,9 +316,7 @@ function openOrder(product) {
   document.getElementById('orderModal').classList.add('active');
 }
 
-function closeModal() {
-  document.getElementById('orderModal').classList.remove('active');
-}
+function closeModal() { document.getElementById('orderModal').classList.remove('active'); }
 
 function changeQty(d) {
   currentQty = Math.max(1, currentQty + d);
@@ -385,7 +387,6 @@ async function placeOrder(name, phone, method, payStatus, payId) {
   const email = document.getElementById('custEmail').value.trim();
   const address = document.getElementById('custAddress').value.trim();
   const total = Number(currentProduct.price) * currentQty;
-
   const orderData = {
     customer_name: name,
     customer_phone: phone,
@@ -399,36 +400,26 @@ async function placeOrder(name, phone, method, payStatus, payId) {
     razorpay_payment_id: payId || null,
     status: 'placed'
   };
-
   const result = await sbFetch('POST', 'orders', orderData);
   closeModal();
-
   const orderId = result && result[0] ? result[0].id : ('ORD' + Date.now());
   const shortId = orderId.toString().substring(0, 8).toUpperCase();
-
-  // Store for invoice
   lastOrder = {
-    id: shortId,
-    name, phone, email, address,
+    id: shortId, name, phone, email, address,
     product: currentProduct.name,
     category: currentProduct.category,
     price: currentProduct.price,
-    qty: currentQty,
-    total,
+    qty: currentQty, total,
     method: method === 'cod' ? 'Cash on Delivery' : 'Online Payment (UPI/Card)',
     payStatus,
     date: new Date().toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'}),
     time: new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'})
   };
-
   const title = method === 'cod' ? 'Order Placed! 🎉' : 'Payment Successful! ✅';
   const msg = method === 'cod'
     ? `Thank you ${name}! Order for "${currentProduct.name}" (Qty: ${currentQty}) worth ₹${total.toLocaleString('en-IN')} placed. Pay on delivery. We'll contact you at ${phone}.`
     : `Thank you ${name}! Payment of ₹${total.toLocaleString('en-IN')} received. Order confirmed. We'll contact you at ${phone} shortly.`;
-
   showResult(true, title, msg, shortId);
-
-  // Send email if provided
   if (email) {
     sendEmail(email, name, phone, shortId, currentProduct.name, currentQty, total, method === 'cod' ? 'Cash on Delivery' : 'Online Payment');
   }
@@ -438,27 +429,15 @@ async function sendEmail(toEmail, name, phone, orderId, product, qty, total, met
   const statusEl = document.getElementById('emailStatus');
   statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending confirmation email...';
   try {
-    // Send to customer
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      customer_name: name,
-      customer_email: toEmail,
-      customer_phone: phone,
-      order_id: orderId,
-      product_name: product,
-      quantity: qty,
-      total_amount: '₹' + Number(total).toLocaleString('en-IN'),
-      payment_method: method
+      customer_name: name, customer_email: toEmail, customer_phone: phone,
+      order_id: orderId, product_name: product, quantity: qty,
+      total_amount: '₹' + Number(total).toLocaleString('en-IN'), payment_method: method
     });
-    // Send copy to owner
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      customer_name: name + ' (NEW ORDER)',
-      customer_email: OWNER_EMAIL,
-      customer_phone: phone,
-      order_id: orderId,
-      product_name: product,
-      quantity: qty,
-      total_amount: '₹' + Number(total).toLocaleString('en-IN'),
-      payment_method: method
+      customer_name: name + ' (NEW ORDER)', customer_email: OWNER_EMAIL, customer_phone: phone,
+      order_id: orderId, product_name: product, quantity: qty,
+      total_amount: '₹' + Number(total).toLocaleString('en-IN'), payment_method: method
     });
     statusEl.innerHTML = '<i class="fas fa-check-circle" style="color:#27ae60"></i> Confirmation email sent to ' + toEmail;
   } catch(e) {
@@ -477,69 +456,10 @@ function showResult(success, title, msg, orderId) {
   document.getElementById('successOverlay').classList.add('active');
 }
 
-// Invoice PDF generator (pure HTML → print)
 function downloadInvoice() {
   if (!lastOrder) return;
   const o = lastOrder;
-  const invoiceHTML = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Invoice – ${o.id}</title>
-<style>
-  body{font-family:Arial,sans-serif;margin:0;padding:40px;color:#222;max-width:700px;margin:0 auto}
-  .header{background:#1A1A1A;color:#C8A96B;padding:30px;text-align:center;margin-bottom:30px}
-  .header h1{font-size:28px;margin:0;letter-spacing:2px}
-  .header p{margin:5px 0 0;color:#888;font-size:13px}
-  .badge{display:inline-block;background:#C8A96B;color:#1A1A1A;padding:6px 16px;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px}
-  .section{margin-bottom:25px}
-  .section h3{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#888;margin:0 0 10px;border-bottom:1px solid #eee;padding-bottom:6px}
-  .row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;border-bottom:1px solid #f5f5f5}
-  .row:last-child{border:none}
-  .label{color:#888}
-  .value{font-weight:600;text-align:right}
-  .total-row{display:flex;justify-content:space-between;padding:12px 0;font-size:17px;font-weight:bold;border-top:2px solid #C8A96B;margin-top:8px}
-  .total-row .value{color:#C8A96B}
-  .footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #eee;color:#888;font-size:12px}
-  @media print{body{padding:20px}.no-print{display:none}}
-</style>
-</head>
-<body>
-<div class="header">
-  <h1>SREE COLLECTIONS</h1>
-  <p>Kurnool, Andhra Pradesh · +91 72071 86844</p>
-</div>
-<div style="text-align:center;margin-bottom:25px">
-  <div class="badge">Tax Invoice</div>
-  <div style="font-size:13px;color:#888">Order ID: <strong style="color:#222">${o.id}</strong> &nbsp;|&nbsp; ${o.date} at ${o.time}</div>
-</div>
-<div class="section">
-  <h3>Customer Details</h3>
-  <div class="row"><span class="label">Name</span><span class="value">${o.name}</span></div>
-  <div class="row"><span class="label">Phone</span><span class="value">${o.phone}</span></div>
-  ${o.email ? `<div class="row"><span class="label">Email</span><span class="value">${o.email}</span></div>` : ''}
-  ${o.address ? `<div class="row"><span class="label">Address</span><span class="value">${o.address}</span></div>` : ''}
-</div>
-<div class="section">
-  <h3>Order Details</h3>
-  <div class="row"><span class="label">Product</span><span class="value">${o.product}</span></div>
-  <div class="row"><span class="label">Category</span><span class="value">${o.category}</span></div>
-  <div class="row"><span class="label">Unit Price</span><span class="value">₹${Number(o.price).toLocaleString('en-IN')}</span></div>
-  <div class="row"><span class="label">Quantity</span><span class="value">${o.qty}</span></div>
-  <div class="row"><span class="label">Payment Method</span><span class="value">${o.method}</span></div>
-  <div class="total-row"><span>Total Amount</span><span class="value">₹${Number(o.total).toLocaleString('en-IN')}</span></div>
-</div>
-<div class="footer">
-  <p>Thank you for shopping at Sree Collections, Kurnool!</p>
-  <p>For queries: +91 72071 86844 · WhatsApp: +91 72071 86844</p>
-  <p style="margin-top:10px;font-size:11px">This is a computer-generated invoice and does not require a signature.</p>
-</div>
-<div class="no-print" style="text-align:center;margin-top:30px">
-  <button onclick="window.print()" style="background:#C8A96B;color:#1A1A1A;border:none;padding:12px 30px;font-size:14px;font-weight:bold;cursor:pointer;letter-spacing:1px">PRINT / SAVE AS PDF</button>
-</div>
-</body>
-</html>`;
-
+  const invoiceHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice – ${o.id}</title><style>body{font-family:Arial,sans-serif;margin:0;padding:40px;color:#222;max-width:700px;margin:0 auto}.header{background:#1A1A1A;color:#C8A96B;padding:30px;text-align:center;margin-bottom:30px}.header h1{font-size:28px;margin:0;letter-spacing:2px}.header p{margin:5px 0 0;color:#888;font-size:13px}.badge{display:inline-block;background:#C8A96B;color:#1A1A1A;padding:6px 16px;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px}.section{margin-bottom:25px}.section h3{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#888;margin:0 0 10px;border-bottom:1px solid #eee;padding-bottom:6px}.row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;border-bottom:1px solid #f5f5f5}.row:last-child{border:none}.label{color:#888}.value{font-weight:600;text-align:right}.total-row{display:flex;justify-content:space-between;padding:12px 0;font-size:17px;font-weight:bold;border-top:2px solid #C8A96B;margin-top:8px}.total-row .value{color:#C8A96B}.footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #eee;color:#888;font-size:12px}@media print{body{padding:20px}.no-print{display:none}}</style></head><body><div class="header"><h1>SREE COLLECTIONS</h1><p>Kurnool, Andhra Pradesh · +91 72071 86844</p></div><div style="text-align:center;margin-bottom:25px"><div class="badge">Tax Invoice</div><div style="font-size:13px;color:#888">Order ID: <strong style="color:#222">${o.id}</strong> &nbsp;|&nbsp; ${o.date} at ${o.time}</div></div><div class="section"><h3>Customer Details</h3><div class="row"><span class="label">Name</span><span class="value">${o.name}</span></div><div class="row"><span class="label">Phone</span><span class="value">${o.phone}</span></div>${o.email ? `<div class="row"><span class="label">Email</span><span class="value">${o.email}</span></div>` : ''}${o.address ? `<div class="row"><span class="label">Address</span><span class="value">${o.address}</span></div>` : ''}</div><div class="section"><h3>Order Details</h3><div class="row"><span class="label">Product</span><span class="value">${o.product}</span></div><div class="row"><span class="label">Category</span><span class="value">${o.category}</span></div><div class="row"><span class="label">Unit Price</span><span class="value">₹${Number(o.price).toLocaleString('en-IN')}</span></div><div class="row"><span class="label">Quantity</span><span class="value">${o.qty}</span></div><div class="row"><span class="label">Payment Method</span><span class="value">${o.method}</span></div><div class="total-row"><span>Total Amount</span><span class="value">₹${Number(o.total).toLocaleString('en-IN')}</span></div></div><div class="footer"><p>Thank you for shopping at Sree Collections, Kurnool!</p><p>For queries: +91 72071 86844 · WhatsApp: +91 72071 86844</p><p style="margin-top:10px;font-size:11px">This is a computer-generated invoice and does not require a signature.</p></div><div class="no-print" style="text-align:center;margin-top:30px"><button onclick="window.print()" style="background:#C8A96B;color:#1A1A1A;border:none;padding:12px 30px;font-size:14px;font-weight:bold;cursor:pointer;letter-spacing:1px">PRINT / SAVE AS PDF</button></div></body></html>`;
   const blob = new Blob([invoiceHTML], {type: 'text/html'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

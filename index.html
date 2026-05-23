@@ -6,37 +6,56 @@
 <title>Sree Collections – Premium Gift Shop in Kurnool</title>
 <meta name="description" content="Sree Collections – Kurnool's most loved gift shop. Premium gifts for birthdays, weddings, anniversaries, corporate events & all occasions. 500+ varieties. Order online now.">
 <meta name="keywords" content="gift shop kurnool, gifts kurnool, birthday gifts kurnool, wedding gifts kurnool, sree collections kurnool, gift store andhra pradesh">
+<meta name="robots" content="index, follow">
 <meta name="google-site-verification" content="google8907c337a7054859">
+
+<!-- ✅ FIXED: canonical now points to Vercel, not Netlify -->
+<link rel="canonical" href="https://sreecollectionsknl.vercel.app/">
+
+<!-- ✅ FIXED: og:url now points to Vercel, not Netlify -->
 <meta property="og:title" content="Sree Collections – Premium Gift Shop in Kurnool">
 <meta property="og:description" content="500+ gift varieties for every occasion. Trusted by thousands in Kurnool.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sreecollectionsknl.netlify.app">
-<link rel="canonical" href="https://sreecollectionsknl.netlify.app">
+<meta property="og:url" content="https://sreecollectionsknl.vercel.app/">
+
+<!-- ✅ FIXED: schema URL now points to Vercel -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Store",
   "name": "Sree Collections",
   "description": "Premium gift shop in Kurnool with 500+ varieties",
-  "address": {"@type": "PostalAddress", "streetAddress": "Kurnool", "addressLocality": "Kurnool", "addressRegion": "Andhra Pradesh", "addressCountry": "IN"},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Kurnool",
+    "addressLocality": "Kurnool",
+    "addressRegion": "Andhra Pradesh",
+    "addressCountry": "IN"
+  },
   "telephone": "+917207186844",
-  "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.4", "reviewCount": "66"},
-  "url": "https://sreecollectionsknl.netlify.app"
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.4",
+    "reviewCount": "66"
+  },
+  "url": "https://sreecollectionsknl.vercel.app/"
 }
 </script>
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
-  --gold: #C8A96B;
-  --gold-light: #E8C98B;
-  --dark: #0F0F0F;
-  --charcoal: #1A1A1A;
-  --card-bg: #1F1F1F;
-  --text: #F5F0E8;
-  --muted: #999;
-  --border: rgba(200,169,107,0.2);
+--gold: #C8A96B;
+--gold-light: #E8C98B;
+--dark: #0F0F0F;
+--charcoal: #1A1A1A;
+--card-bg: #1F1F1F;
+--text: #F5F0E8;
+--muted: #999;
+--border: rgba(200,169,107,0.2);
 }
+
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--dark);color:var(--text);font-family:'Manrope',sans-serif;overflow-x:hidden}
@@ -133,202 +152,201 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
 .footer-col h4{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
 .footer-col a{display:block;color:var(--muted);text-decoration:none;font-size:0.85rem;margin-bottom:0.6rem;transition:color 0.3s}
 .footer-col a:hover{color:var(--text)}
-.footer-bottom{padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;font-size:0.8rem;color:var(--muted)}
+.footer-bottom{padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;font-size:0.8rem;color:var(--muted)}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
 @media(max-width:768px){
-  .nav-links,.nav-cta{display:none}
-  .hamburger{display:flex}
-  .hero h1{font-size:2.8rem}
-  .hero-stats{gap:1.5rem}
-  .contact-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr}
+.nav-links,.nav-cta{display:none}
+.hamburger{display:flex}
+.hero h1{font-size:2.8rem}
+.hero-stats{gap:1.5rem}
+.contact-grid{grid-template-columns:1fr}
+.footer-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="logo">Sree Collections</a>
-  <ul class="nav-links">
-    <li><a href="./collections.html">Collections</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#reviews">Reviews</a></li>
-    <li><a href="tel:+917207186844">Contact</a></li>
-    <li><a href="admin-login.html" style="color:rgba(200,169,107,0.4);font-size:0.78rem"><i class="fas fa-lock"></i> Admin</a></li>
-  </ul>
-  <a href="./collections.html" class="nav-cta">Shop Now</a>
-  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+<a href="index.html" class="logo">Sree Collections</a>
+<ul class="nav-links">
+<li><a href="./collections.html">Collections</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#reviews">Reviews</a></li>
+<li><a href="tel:+917207186844">Contact</a></li>
+<li><a href="admin-login.html" style="color:rgba(200,169,107,0.4);font-size:0.78rem"><i class="fas fa-lock"></i> Admin</a></li>
+</ul>
+<a href="./collections.html" class="nav-cta">Shop Now</a>
+<button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+<span></span><span></span><span></span>
+</button>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="./collections.html" onclick="toggleMenu()">Collections</a>
-  <a href="#about" onclick="toggleMenu()">About</a>
-  <a href="#reviews" onclick="toggleMenu()">Reviews</a>
-  <a href="tel:+917207186844" onclick="toggleMenu()">Contact</a>
-  <a href="./collections.html" style="color:var(--gold);font-weight:600">🛍️ Shop Now</a>
-  <a href="admin-login.html" style="color:var(--muted);font-size:0.8rem">Admin Login</a>
+<a href="./collections.html" onclick="toggleMenu()">Collections</a>
+<a href="#about" onclick="toggleMenu()">About</a>
+<a href="#reviews" onclick="toggleMenu()">Reviews</a>
+<a href="tel:+917207186844" onclick="toggleMenu()">Contact</a>
+<a href="./collections.html" style="color:var(--gold);font-weight:600">🛍️ Shop Now</a>
+<a href="admin-login.html" style="color:var(--muted);font-size:0.8rem">Admin Login</a>
 </div>
 
 <!-- HERO -->
 <section class="hero">
-  <div>
-    <div class="hero-badge"><i class="fas fa-star"></i> 4.4★ Rating · 66+ Reviews</div>
-    <h1>Gifts That<br>Create <em>Memories</em></h1>
-    <p>Kurnool's most trusted gift destination. 500+ handpicked varieties for every occasion, emotion, and person you love.</p>
-    <div class="hero-btns">
-      <a href="./collections.html" class="btn-primary">Explore Collections</a>
-      <a href="tel:+917207186844" class="btn-outline"><i class="fas fa-phone"></i> Call Us</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Gift Varieties</div></div>
-      <div class="stat"><div class="stat-num">4.4★</div><div class="stat-label">Google Rating</div></div>
-      <div class="stat"><div class="stat-num">66+</div><div class="stat-label">Reviews</div></div>
-      <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Categories</div></div>
-    </div>
-  </div>
+<div>
+<div class="hero-badge"><i class="fas fa-star"></i> 4.4★ Rating · 66+ Reviews</div>
+<h1>Gifts That<br>Create <em>Memories</em></h1>
+<p>Kurnool's most trusted gift destination. 500+ handpicked varieties for every occasion, emotion, and person you love.</p>
+<div class="hero-btns">
+<a href="./collections.html" class="btn-primary">Explore Collections</a>
+<a href="tel:+917207186844" class="btn-outline"><i class="fas fa-phone"></i> Call Us</a>
+</div>
+<div class="hero-stats">
+<div class="stat"><div class="stat-num">500+</div><div class="stat-label">Gift Varieties</div></div>
+<div class="stat"><div class="stat-num">4.4★</div><div class="stat-label">Google Rating</div></div>
+<div class="stat"><div class="stat-num">66+</div><div class="stat-label">Reviews</div></div>
+<div class="stat"><div class="stat-num">12+</div><div class="stat-label">Categories</div></div>
+</div>
+</div>
 </section>
 
 <!-- COLLECTIONS -->
 <section class="collections" id="collections">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-label">What We Offer</div>
-    <h2 class="section-title">Browse Our Collections</h2>
-    <p class="section-subtitle">From heartfelt personal gifts to elegant corporate hampers — we have something for every occasion.</p>
-    <div class="collections-grid">
-      <a href="collections.html?category=Birthday" class="collection-card"><div class="card-icon">🎂</div><div class="card-title">Birthday</div><div class="card-desc">Make their day unforgettable with personalised birthday hampers and surprise boxes.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
-      <a href="collections.html?category=Wedding" class="collection-card"><div class="card-icon">💍</div><div class="card-title">Wedding</div><div class="card-desc">Elegant wedding gifts and return gift sets that leave a lasting impression.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
-      <a href="collections.html?category=Anniversary" class="collection-card"><div class="card-icon">❤️</div><div class="card-title">Anniversary</div><div class="card-desc">Celebrate love milestones with premium anniversary gift boxes.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
-      <a href="collections.html?category=Corporate" class="collection-card"><div class="card-icon">💼</div><div class="card-title">Corporate</div><div class="card-desc">Impress clients and employees with thoughtful corporate gift sets.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
-      <a href="collections.html?category=Festivals" class="collection-card"><div class="card-icon">🪔</div><div class="card-title">Festivals</div><div class="card-desc">Festive hampers for Diwali, Ugadi, Sankranti and all Indian celebrations.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
-      <a href="collections.html?category=Baby+Shower" class="collection-card"><div class="card-icon">👶</div><div class="card-title">Baby Shower</div><div class="card-desc">Adorable baby shower kits and newborn gift sets for the little one.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
-      <a href="collections.html?category=Retirement" class="collection-card"><div class="card-icon">🏆</div><div class="card-title">Retirement</div><div class="card-desc">Honour a lifetime of work with meaningful retirement gifts.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
-      <a href="./collections.html" class="collection-card"><div class="card-icon">🎁</div><div class="card-title">All Gifts</div><div class="card-desc">Browse our full catalogue — 500+ varieties for every budget and occasion.</div><div class="card-arrow">View All <i class="fas fa-arrow-right"></i></div></a>
-    </div>
-  </div>
+<div style="max-width:1200px;margin:0 auto">
+<div class="section-label">What We Offer</div>
+<h2 class="section-title">Browse Our Collections</h2>
+<p class="section-subtitle">From heartfelt personal gifts to elegant corporate hampers — we have something for every occasion.</p>
+<div class="collections-grid">
+<a href="collections.html?category=Birthday" class="collection-card"><div class="card-icon">🎂</div><div class="card-title">Birthday</div><div class="card-desc">Make their day unforgettable with personalised birthday hampers and surprise boxes.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
+<a href="collections.html?category=Wedding" class="collection-card"><div class="card-icon">💍</div><div class="card-title">Wedding</div><div class="card-desc">Elegant wedding gifts and return gift sets that leave a lasting impression.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
+<a href="collections.html?category=Anniversary" class="collection-card"><div class="card-icon">❤️</div><div class="card-title">Anniversary</div><div class="card-desc">Celebrate love milestones with premium anniversary gift boxes.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
+<a href="collections.html?category=Corporate" class="collection-card"><div class="card-icon">💼</div><div class="card-title">Corporate</div><div class="card-desc">Impress clients and employees with thoughtful corporate gift sets.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
+<a href="collections.html?category=Festivals" class="collection-card"><div class="card-icon">🪔</div><div class="card-title">Festivals</div><div class="card-desc">Festive hampers for Diwali, Ugadi, Sankranti and all Indian celebrations.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
+<a href="collections.html?category=Baby+Shower" class="collection-card"><div class="card-icon">👶</div><div class="card-title">Baby Shower</div><div class="card-desc">Adorable baby shower kits and newborn gift sets for the little one.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
+<a href="collections.html?category=Retirement" class="collection-card"><div class="card-icon">🏆</div><div class="card-title">Retirement</div><div class="card-desc">Honour a lifetime of work with meaningful retirement gifts.</div><div class="card-arrow">Shop Now <i class="fas fa-arrow-right"></i></div></a>
+<a href="./collections.html" class="collection-card"><div class="card-icon">🎁</div><div class="card-title">All Gifts</div><div class="card-desc">Browse our full catalogue — 500+ varieties for every budget and occasion.</div><div class="card-arrow">View All <i class="fas fa-arrow-right"></i></div></a>
+</div>
+</div>
 </section>
 
 <!-- WHY -->
 <section id="about" style="background:var(--dark)">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-label">Why Choose Us</div>
-    <h2 class="section-title">Kurnool's Most Trusted Gift Store</h2>
-    <div class="why-grid">
-      <div class="why-card"><div class="why-num">01</div><div class="why-title">500+ Unique Varieties</div><div class="why-desc">The widest selection of premium gifts in Kurnool — all under one roof.</div></div>
-      <div class="why-card"><div class="why-num">02</div><div class="why-title">Custom Hampers</div><div class="why-desc">We personalise every hamper to your budget, occasion and recipient.</div></div>
-      <div class="why-card"><div class="why-num">03</div><div class="why-title">Premium Packaging</div><div class="why-desc">Luxurious gift-ready packaging that makes the unboxing moment magical.</div></div>
-      <div class="why-card"><div class="why-num">04</div><div class="why-title">Online Ordering</div><div class="why-desc">Browse, order and pay online — pick up in store or get it delivered.</div></div>
-      <div class="why-card"><div class="why-num">05</div><div class="why-title">4.4★ on Google</div><div class="why-desc">66+ genuine reviews from happy customers across Kurnool.</div></div>
-      <div class="why-card"><div class="why-num">06</div><div class="why-title">All Budgets Welcome</div><div class="why-desc">From ₹299 to premium ₹5000+ hampers — great gifts for every budget.</div></div>
-    </div>
-  </div>
+<div style="max-width:1200px;margin:0 auto">
+<div class="section-label">Why Choose Us</div>
+<h2 class="section-title">Kurnool's Most Trusted Gift Store</h2>
+<div class="why-grid">
+<div class="why-card"><div class="why-num">01</div><div class="why-title">500+ Unique Varieties</div><div class="why-desc">The widest selection of premium gifts in Kurnool — all under one roof.</div></div>
+<div class="why-card"><div class="why-num">02</div><div class="why-title">Custom Hampers</div><div class="why-desc">We personalise every hamper to your budget, occasion and recipient.</div></div>
+<div class="why-card"><div class="why-num">03</div><div class="why-title">Premium Packaging</div><div class="why-desc">Luxurious gift-ready packaging that makes the unboxing moment magical.</div></div>
+<div class="why-card"><div class="why-num">04</div><div class="why-title">Online Ordering</div><div class="why-desc">Browse, order and pay online — pick up in store or get it delivered.</div></div>
+<div class="why-card"><div class="why-num">05</div><div class="why-title">4.4★ on Google</div><div class="why-desc">66+ genuine reviews from happy customers across Kurnool.</div></div>
+<div class="why-card"><div class="why-num">06</div><div class="why-title">All Budgets Welcome</div><div class="why-desc">From ₹299 to premium ₹5000+ hampers — great gifts for every budget.</div></div>
+</div>
+</div>
 </section>
 
 <!-- REVIEWS -->
 <section class="reviews" id="reviews">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-label">Customer Stories</div>
-    <h2 class="section-title">What People Say</h2>
-    <div class="reviews-grid">
-      <div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Ordered a birthday hamper for my wife — the packaging was absolutely stunning. She was speechless. Will definitely order again!"</div><div class="reviewer"><div class="reviewer-avatar">R</div><div><div class="reviewer-name">Ravi Kumar</div><div class="reviewer-date">Google Review</div></div></div></div>
-      <div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Best gift shop in Kurnool! Got wedding return gifts for 200 guests — the quality and variety were excellent at a great price."</div><div class="reviewer"><div class="reviewer-avatar">S</div><div><div class="reviewer-name">Sunitha Reddy</div><div class="reviewer-date">Google Review</div></div></div></div>
-      <div class="review-card"><div class="stars">★★★★☆</div><div class="review-text">"Very good collection. The staff was helpful in selecting the right corporate gifts for our clients. Good packaging, on-time delivery."</div><div class="reviewer"><div class="reviewer-avatar">M</div><div><div class="reviewer-name">Mahesh Babu</div><div class="reviewer-date">Google Review</div></div></div></div>
-      <div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"The anniversary gift box I ordered was perfect — exactly what I imagined. Super quick response on WhatsApp too!"</div><div class="reviewer"><div class="reviewer-avatar">P</div><div><div class="reviewer-name">Priya Sharma</div><div class="reviewer-date">Google Review</div></div></div></div>
-      <div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Loved the Diwali hampers! Bought for my entire office. Everyone was happy. Quality is unmatched compared to other stores."</div><div class="reviewer"><div class="reviewer-avatar">A</div><div><div class="reviewer-name">Anil Prasad</div><div class="reviewer-date">Google Review</div></div></div></div>
-      <div class="review-card"><div class="stars">★★★★☆</div><div class="review-text">"Great baby shower gift kit. All items were premium and beautifully arranged. Highly recommend for new parents!"</div><div class="reviewer"><div class="reviewer-avatar">L</div><div><div class="reviewer-name">Lakshmi Devi</div><div class="reviewer-date">Google Review</div></div></div></div>
-    </div>
-  </div>
+<div style="max-width:1200px;margin:0 auto">
+<div class="section-label">Customer Stories</div>
+<h2 class="section-title">What People Say</h2>
+<div class="reviews-grid">
+<div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Ordered a birthday hamper for my wife — the packaging was absolutely stunning. She was speechless. Will definitely order again!"</div><div class="reviewer"><div class="reviewer-avatar">R</div><div><div class="reviewer-name">Ravi Kumar</div><div class="reviewer-date">Google Review</div></div></div></div>
+<div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Best gift shop in Kurnool! Got wedding return gifts for 200 guests — the quality and variety were excellent at a great price."</div><div class="reviewer"><div class="reviewer-avatar">S</div><div><div class="reviewer-name">Sunitha Reddy</div><div class="reviewer-date">Google Review</div></div></div></div>
+<div class="review-card"><div class="stars">★★★★☆</div><div class="review-text">"Very good collection. The staff was helpful in selecting the right corporate gifts for our clients. Good packaging, on-time delivery."</div><div class="reviewer"><div class="reviewer-avatar">M</div><div><div class="reviewer-name">Mahesh Babu</div><div class="reviewer-date">Google Review</div></div></div></div>
+<div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"The anniversary gift box I ordered was perfect — exactly what I imagined. Super quick response on WhatsApp too!"</div><div class="reviewer"><div class="reviewer-avatar">P</div><div><div class="reviewer-name">Priya Sharma</div><div class="reviewer-date">Google Review</div></div></div></div>
+<div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Loved the Diwali hampers! Bought for my entire office. Everyone was happy. Quality is unmatched compared to other stores."</div><div class="reviewer"><div class="reviewer-avatar">A</div><div><div class="reviewer-name">Anil Prasad</div><div class="reviewer-date">Google Review</div></div></div></div>
+<div class="review-card"><div class="stars">★★★★☆</div><div class="review-text">"Great baby shower gift kit. All items were premium and beautifully arranged. Highly recommend for new parents!"</div><div class="reviewer"><div class="reviewer-avatar">L</div><div><div class="reviewer-name">Lakshmi Devi</div><div class="reviewer-date">Google Review</div></div></div></div>
+</div>
+</div>
 </section>
 
 <!-- CTA -->
 <div class="cta-banner">
-  <h2>Ready to Find the Perfect Gift?</h2>
-  <p>Browse 500+ options online or call us to customise your hamper.</p>
-  <div class="cta-btns">
-    <a href="./collections.html" class="btn-primary">Shop Now</a>
-    <a href="tel:+917207186844" class="btn-outline"><i class="fas fa-phone"></i> +91 72071 86844</a>
-    <a href="https://wa.me/917207186844" class="btn-outline" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-  </div>
+<h2>Ready to Find the Perfect Gift?</h2>
+<p>Browse 500+ options online or call us to customise your hamper.</p>
+<div class="cta-btns">
+<a href="./collections.html" class="btn-primary">Shop Now</a>
+<a href="tel:+917207186844" class="btn-outline"><i class="fas fa-phone"></i> +91 72071 86844</a>
+<a href="https://wa.me/917207186844" class="btn-outline" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+</div>
 </div>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-label">Find Us</div>
-    <h2 class="section-title">Visit Our Store</h2>
-    <div class="contact-grid">
-      <div class="contact-info">
-        <div class="contact-item"><div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div><div><div class="contact-label">Address</div><div class="contact-val">Sree Collections, Kurnool, Andhra Pradesh, India</div></div></div>
-        <div class="contact-item"><div class="contact-icon"><i class="fas fa-phone"></i></div><div><div class="contact-label">Phone</div><div class="contact-val"><a href="tel:+917207186844" style="color:var(--text);text-decoration:none">+91 72071 86844</a></div></div></div>
-        <div class="contact-item"><div class="contact-icon"><i class="fab fa-whatsapp"></i></div><div><div class="contact-label">WhatsApp</div><div class="contact-val"><a href="https://wa.me/917207186844" target="_blank" style="color:var(--text);text-decoration:none">+91 72071 86844</a></div></div></div>
-        <div class="contact-item"><div class="contact-icon"><i class="fas fa-clock"></i></div><div><div class="contact-label">Hours</div><div class="contact-val">Mon–Sat: 9 AM – 9 PM<br>Sunday: 10 AM – 7 PM</div></div></div>
-        <div class="contact-item"><div class="contact-icon"><i class="fas fa-star"></i></div><div><div class="contact-label">Rating</div><div class="contact-val">4.4★ on Google · 66+ Reviews</div></div></div>
-      </div>
-      <div class="map-box">
-        <i class="fas fa-map-marked-alt"></i>
-        <p style="color:var(--muted);font-size:0.9rem">Sree Collections, Kurnool</p>
-        <a href="https://maps.google.com/?q=Sree+Collections+Kurnool" target="_blank" class="map-link"><i class="fas fa-directions"></i> Get Directions</a>
-      </div>
-    </div>
-  </div>
+<div style="max-width:1200px;margin:0 auto">
+<div class="section-label">Find Us</div>
+<h2 class="section-title">Visit Our Store</h2>
+<div class="contact-grid">
+<div class="contact-info">
+<div class="contact-item"><div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div><div><div class="contact-label">Address</div><div class="contact-val">Sree Collections, Kurnool, Andhra Pradesh, India</div></div></div>
+<div class="contact-item"><div class="contact-icon"><i class="fas fa-phone"></i></div><div><div class="contact-label">Phone</div><div class="contact-val"><a href="tel:+917207186844" style="color:var(--text);text-decoration:none">+91 72071 86844</a></div></div></div>
+<div class="contact-item"><div class="contact-icon"><i class="fab fa-whatsapp"></i></div><div><div class="contact-label">WhatsApp</div><div class="contact-val"><a href="https://wa.me/917207186844" target="_blank" style="color:var(--text);text-decoration:none">+91 72071 86844</a></div></div></div>
+<div class="contact-item"><div class="contact-icon"><i class="fas fa-clock"></i></div><div><div class="contact-label">Hours</div><div class="contact-val">Mon–Sat: 9 AM – 9 PM<br>Sunday: 10 AM – 7 PM</div></div></div>
+<div class="contact-item"><div class="contact-icon"><i class="fas fa-star"></i></div><div><div class="contact-label">Rating</div><div class="contact-val">4.4★ on Google · 66+ Reviews</div></div></div>
+</div>
+<div class="map-box">
+<i class="fas fa-map-marked-alt"></i>
+<p style="color:var(--muted);font-size:0.9rem">Sree Collections, Kurnool</p>
+<a href="https://maps.google.com/?q=Sree+Collections+Kurnool" target="_blank" class="map-link"><i class="fas fa-directions"></i> Get Directions</a>
+</div>
+</div>
+</div>
 </section>
 
 <footer>
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="index.html" class="logo">Sree Collections</a>
-        <p>Kurnool's most loved gift store. Premium gifts for every occasion, every emotion, every person.</p>
-        <div style="display:flex;gap:1rem;margin-top:1rem">
-          <a href="https://wa.me/917207186844" target="_blank" style="color:var(--muted);font-size:1.2rem"><i class="fab fa-whatsapp"></i></a>
-          <a href="tel:+917207186844" style="color:var(--muted);font-size:1.2rem"><i class="fas fa-phone"></i></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Collections</h4>
-        <a href="collections.html?category=Birthday">Birthday Gifts</a>
-        <a href="collections.html?category=Wedding">Wedding Gifts</a>
-        <a href="collections.html?category=Anniversary">Anniversary</a>
-        <a href="collections.html?category=Corporate">Corporate</a>
-        <a href="collections.html?category=Festivals">Festivals</a>
-      </div>
-      <div class="footer-col">
-        <h4>Quick Links</h4>
-        <a href="./collections.html">All Products</a>
-        <a href="tel:+917207186844">Contact Us</a>
-        <a href="https://wa.me/917207186844" target="_blank">WhatsApp Order</a>
-        <a href="admin-login.html" style="color:rgba(255,255,255,0.3);font-size:0.8rem">Admin</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 Sree Collections, Kurnool. All rights reserved.</span>
-      <span>Made with ❤️ in Kurnool</span>
-    </div>
-  </div>
+<div style="max-width:1200px;margin:0 auto">
+<div class="footer-grid">
+<div class="footer-brand">
+<a href="index.html" class="logo">Sree Collections</a>
+<p>Kurnool's most loved gift store. Premium gifts for every occasion, every emotion, every person.</p>
+<div style="display:flex;gap:1rem;margin-top:1rem">
+<a href="https://wa.me/917207186844" target="_blank" style="color:var(--muted);font-size:1.2rem"><i class="fab fa-whatsapp"></i></a>
+<a href="tel:+917207186844" style="color:var(--muted);font-size:1.2rem"><i class="fas fa-phone"></i></a>
+</div>
+</div>
+<div class="footer-col">
+<h4>Collections</h4>
+<a href="collections.html?category=Birthday">Birthday Gifts</a>
+<a href="collections.html?category=Wedding">Wedding Gifts</a>
+<a href="collections.html?category=Anniversary">Anniversary</a>
+<a href="collections.html?category=Corporate">Corporate</a>
+<a href="collections.html?category=Festivals">Festivals</a>
+</div>
+<div class="footer-col">
+<h4>Quick Links</h4>
+<a href="./collections.html">All Products</a>
+<a href="tel:+917207186844">Contact Us</a>
+<a href="https://wa.me/917207186844" target="_blank">WhatsApp Order</a>
+<a href="admin-login.html" style="color:rgba(255,255,255,0.3);font-size:0.8rem">Admin</a>
+</div>
+</div>
+<div class="footer-bottom">
+<span>© 2025 Sree Collections, Kurnool. All rights reserved.</span>
+<span>Made with ❤️ in Kurnool</span>
+</div>
+</div>
 </footer>
 
 <script>
 function toggleMenu(){
-  const m = document.getElementById('mobileMenu');
-  m.style.display = m.style.display === 'block' ? 'none' : 'block';
+const m = document.getElementById('mobileMenu');
+m.style.display = m.style.display === 'block' ? 'none' : 'block';
 }
-// Scroll reveal
 const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
+entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
 }, {threshold:0.1});
 document.querySelectorAll('.collection-card,.why-card,.review-card').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-  observer.observe(el);
+el.style.opacity = '0';
+el.style.transform = 'translateY(20px)';
+el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+observer.observe(el);
 });
 document.addEventListener('DOMContentLoaded', () => {
-  const style = document.createElement('style');
-  style.textContent = '.visible{opacity:1 !important;transform:translateY(0) !important}';
-  document.head.appendChild(style);
+const style = document.createElement('style');
+style.textContent = '.visible{opacity:1 !important;transform:translateY(0) !important}';
+document.head.appendChild(style);
 });
 </script>
 </body>
