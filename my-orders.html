@@ -301,9 +301,19 @@ async function loadMyOrders() {
     el.innerHTML = '';
     return;
   }
-  const searchPhone = '+91' + clean;
-  saveRecentPhone(searchPhone);
-  const orders = await sbFetch('GET', 'orders', null, `customer_phone=eq.${encodeURIComponent(searchPhone)}&order=created_at.desc`);
+  const possiblePhones = [
+  clean,
+  '+91' + clean
+];
+
+saveRecentPhone(clean);
+
+const orders = await sbFetch(
+  'GET',
+  'orders',
+  null,
+  `or=(customer_phone.eq.${encodeURIComponent(possiblePhones[0])},customer_phone.eq.${encodeURIComponent(possiblePhones[1])})&order=created_at.desc`
+);
   const emptyState = document.getElementById('emptyState');
   if (!orders || orders.length === 0) { 
     el.innerHTML = '';
