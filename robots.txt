@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /admin-login.html
-Disallow: /admin.html
-
-Sitemap: https://sreecollectionsknl.vercel.app/sitemap.xml
