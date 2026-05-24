@@ -424,11 +424,11 @@ async function updateOrderStatus(id, status) {
   if (!o.customer_email) return;
   
   const statusMessages = {
-    processing: 'Your order is now being processed and will be delivered soon.',
-    delivered: 'Your order has been delivered! Thank you for shopping with us.',
-    cancelled: 'Your order has been cancelled. Please contact us for any queries.',
-    placed: 'Your order has been confirmed.'
-  };
+  processing: 'Order Processing 🔄',
+  delivered: 'Order Delivered ✅',
+  cancelled: 'Order Cancelled ❌',
+  placed: 'Order Confirmed ✅'
+};
   
   try {
     await fetch('https://api.emailjs.com/api/v1.0/email/send', {
