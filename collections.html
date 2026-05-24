@@ -509,6 +509,7 @@ async function placeOrder(name, phone, email, method, payStatus, payId) {
   const orderData = {
     customer_name: name,
     customer_phone: phone,
+    customer_email: email,
     customer_address: address || null,
     product_id: currentProduct.id,
     product_name: currentProduct.name,
