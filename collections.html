@@ -599,7 +599,41 @@ function downloadInvoice() {
   a.click();
   URL.revokeObjectURL(url);
 }
+async function loadMyOrders() {
+  const phone = document.getElementById('myOrdersPhone').value.trim();
+  if (!phone) { alert('Enter your phone number'); return; }
+  const el = document.getElementById('myOrdersList');
+  el.innerHTML = '<p style="color:var(--muted)">Loading...</p>';
+  const orders = await sbFetch('GET', 'orders', null, `customer_phone=eq.${encodeURIComponent(phone)}&order=created_at.desc`);
+  if (!orders || orders.length === 0) {
+    el.innerHTML = '<p style="color:var(--muted)">No orders found for this number.</p>';
+    return;
+  }
+  el.innerHTML = orders.map(o => `
+    <div style="background:var(--card-bg);border:1px solid var(--border);padding:1.2rem;margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+        <span style="color:var(--gold);font-weight:700">${o.product_name}</span>
+        <span style="color:var(--muted);font-size:0.8rem">${new Date(o.created_at).toLocaleDateString('en-IN')}</span>
+      </div>
+      <div style="font-size:0.85rem;color:var(--muted)">Qty: ${o.quantity} · ₹${Number(o.product_price * o.quantity).toLocaleString('en-IN')} · ${o.payment_method === 'cod' ? 'Cash on Delivery' : 'Online Payment'}</div>
+      <div style="margin-top:0.5rem;font-size:0.8rem">Status: <span style="color:var(--gold)">${o.status}</span></div>
+    </div>
+  `).join('');
+}
 
 loadProducts();
-</script></body>
+</script>
+
+<!-- MY ORDERS -->
+<div style="max-width:700px;margin:3rem auto;padding:0 2rem">
+  <h2 style="font-family:'Cormorant Garamond',serif;color:var(--gold);margin-bottom:1rem">My Orders</h2>
+  <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1rem">Enter the phone number you used when placing your order.</p>
+  <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+    <input type="tel" id="myOrdersPhone" placeholder="+91 XXXXX XXXXX" style="flex:1;padding:0.75rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif">
+    <button onclick="loadMyOrders()" style="padding:0.75rem 1.2rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">Find Orders</button>
+  </div>
+  <div id="myOrdersList"></div>
+</div>
+
+</body>
 </html>
