@@ -284,8 +284,8 @@ async function loadProducts() {
       <td><span class="badge ${p.in_stock ? 'badge-success' : 'badge-pending'}">${p.in_stock ? 'In Stock' : 'Out of Stock'}</span></td>
       <td>
         <div class="action-btns">
-          <button class="btn-small" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button>
-          <button class="btn-small btn-delete" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+<button class="btn-small" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
+          <button class="btn-small btn-delete" onclick="deleteProduct('${p.id}')"><i class="fas fa-trash"></i></button>
         </div>
       </td>
     </tr>
