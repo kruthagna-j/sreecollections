@@ -410,10 +410,11 @@ async function clearAllOrders() {
   
   alert(`✓ Deleted ${orders.length} orders successfully.`);
   loadOrders();
-  async function updateOrderStatus(id, status) {
-  await sbFetch('PATCH', 'orders', { status }, `id=eq.${id}`);
   loadStats();
 }
+
+async function updateOrderStatus(id, status) {
+  await sbFetch('PATCH', 'orders', { status }, `id=eq.${id}`);
   loadStats();
 }
 
