@@ -27,6 +27,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
+
+
+
 :root {
   --gold: #C8A96B;
   --gold-light: #E8C98B;
@@ -37,12 +40,22 @@
   --muted: #999;
   --border: rgba(200,169,107,0.2);
 }
+body.light-mode {
+  --gold: #9A6F2E;
+  --gold-light: #B8882A;
+  --dark: #F8F4EE;
+  --charcoal: #EDE8E0;
+  --card-bg: #E8E2D8;
+  --text: #1A1A1A;
+  --muted: #666;
+  --border: rgba(154,111,46,0.25);
+}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--dark);color:var(--text);font-family:'Manrope',sans-serif;overflow-x:hidden}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,15,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+nav{position:fixed;top:40px;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,15,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
 .logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--gold);text-decoration:none}
 .nav-links{display:flex;gap:2rem;list-style:none}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;letter-spacing:0.05em;text-transform:uppercase;transition:color 0.3s}
@@ -156,6 +169,11 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
 </script>
 </head>
 <body>
+  <!-- ANNOUNCEMENT BANNER -->
+<div id="annBanner" style="background:var(--gold);color:var(--dark);text-align:center;padding:0.5rem 1rem;font-size:0.82rem;font-weight:600;letter-spacing:0.04em;position:relative;z-index:200">
+  🎁 Free gift wrapping on all orders above ₹499 &nbsp;|&nbsp; Call <a href="tel:+917207186844" style="color:var(--dark);font-weight:700">+91 72071 86844</a>
+  <span onclick="document.getElementById('annBanner').style.display='none';document.querySelector('nav').style.top='0';document.getElementById('mobileMenu').style.top='64px'" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:1rem">✕</span>
+</div>
 
 <nav>
   <a href="index.html" class="logo">Sree Collections</a>
@@ -169,6 +187,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
     <li><a href="admin-login.html" style="color:rgba(200,169,107,0.4);font-size:0.78rem"><i class="fas fa-lock"></i> Admin</a></li>
   </ul>
   <a href="./collections.html" class="nav-cta">Shop Now</a>
+  <button onclick="toggleTheme()" id="themeBtn" title="Toggle theme" style="background:none;border:1px solid var(--border);color:var(--gold);width:36px;height:36px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center">🌙</button>
   <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -255,6 +274,36 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
   </div>
 </section>
 
+<!-- PINCODE CHECKER -->
+<section style="background:var(--dark);padding:3rem 2rem;text-align:center">
+  <div style="max-width:480px;margin:0 auto">
+    <div class="section-label">Delivery Check</div>
+    <h2 class="section-title" style="font-size:1.8rem">Do We Deliver to You?</h2>
+    <div style="display:flex;gap:0.5rem;margin-top:1.5rem">
+      <input id="pinInput" type="tel" maxlength="6" placeholder="Enter your pincode" style="flex:1;padding:0.8rem 1rem;background:var(--card-bg);border:1px solid var(--border);color:var(--text);font-size:0.9rem;font-family:'Manrope',sans-serif">
+      <button onclick="checkPin()" style="padding:0.8rem 1.5rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">Check</button>
+    </div>
+    <div id="pinResult" style="margin-top:1rem;font-size:0.9rem;min-height:24px"></div>
+  </div>
+</section>
+
+<script>
+function checkPin() {
+  const pin = document.getElementById('pinInput').value.trim();
+  const res = document.getElementById('pinResult');
+  if (pin.length !== 6 || isNaN(pin)) {
+    res.innerHTML = '<span style="color:#e74c3c">⚠️ Enter a valid 6-digit pincode.</span>'; return;
+  }
+  const serviceable = ['518001','518002','518003','518004','518005','518006','518007','518010','518301','518302','518303','518380','518395','518396','518401','518402','518411','518412','518422','518432','518442','518452','518462','518464','518466','518467','518468','518501','518502','518503','518510','518511','518512','518523','518533','518543','518553','518563','518573','518583','518593','518598','518599'];
+  if (serviceable.includes(pin)) {
+    res.innerHTML = '✅ <strong style="color:#27ae60">Great news!</strong> We deliver to your area. <a href="https://wa.me/917207186844" target="_blank" style="color:var(--gold)">Order on WhatsApp →</a>';
+  } else {
+    res.innerHTML = '📞 <strong style="color:var(--gold)">Call us</strong> at <a href="tel:+917207186844" style="color:var(--gold)">+91 72071 86844</a> to check delivery to your area.';
+  }
+}
+document.getElementById('pinInput')?.addEventListener('keydown', e => { if(e.key==='Enter') checkPin(); });
+</script>
+
 <!-- CTA -->
 <div class="cta-banner">
   <h2>Ready to Find the Perfect Gift?</h2>
@@ -301,6 +350,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
 </section>
 
 <script>
+
 const SUPABASE_URL = 'https://peqqtfvypljvgcorddbn.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlcXF0ZnZ5cGxqdmdjb3JkZGJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNDU1OTAsImV4cCI6MjA5NDgyMTU5MH0.J364P7n9HazV0F8Bd9o_OKBsfKbfLAbW1vCRjIflLtE';
 
@@ -409,6 +459,17 @@ document.addEventListener('DOMContentLoaded', () => {
   style.textContent = '.visible{opacity:1 !important;transform:translateY(0) !important}';
   document.head.appendChild(style);
 });
+
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light-mode');
+  document.getElementById('themeBtn').textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+// Restore saved theme
+if (localStorage.getItem('theme') === 'light') {
+  document.body.classList.add('light-mode');
+  document.getElementById('themeBtn').textContent = '☀️';
+}
 
 </script>
 

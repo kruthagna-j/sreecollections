@@ -14,7 +14,7 @@
   :root{--gold:#C8A96B;--gold-light:#E8C98B;--dark:#0F0F0F;--charcoal:#1A1A1A;--card-bg:#1F1F1F;--text:#F5F0E8;--muted:#999;--border:rgba(200,169,107,0.2)}
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--dark);color:var(--text);font-family:'Manrope',sans-serif}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,15,0.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  nav{position:fixed;top: 40px;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(15,15,15,0.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
   .logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--gold);text-decoration:none}
   .nav-back{color:var(--muted);text-decoration:none;font-size:0.85rem;display:flex;align-items:center;gap:0.4rem;transition:color 0.3s}
   .nav-back:hover{color:var(--gold)}
@@ -93,7 +93,11 @@
 </script>
   </head>
   <body>
-
+<!-- ANNOUNCEMENT BANNER -->
+<div id="annBanner" style="background:var(--gold);color:var(--dark);text-align:center;padding:0.5rem 1rem;font-size:0.82rem;font-weight:600;letter-spacing:0.04em;position:relative;z-index:200">
+  🎁 Free gift wrapping on all orders above ₹499 &nbsp;|&nbsp; Call <a href="tel:+917207186844" style="color:var(--dark);font-weight:700">+91 72071 86844</a>
+  <span onclick="document.getElementById('annBanner').style.display='none'" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);cursor:pointer;font-size:1rem">✕</span>
+</div>
   <nav>
     <a href="index.html" class="logo">Sree Collections</a>
     <div style="display:flex;align-items:center;gap:1.5rem">
@@ -865,8 +869,7 @@ function searchProducts() {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   }
 }
-let cart = JSON.parse(localStorage.getItem('sreecart') || '[]');
-updateCartUI();
+let cart = [];
 let currentCartIndex = 0;
 
 function addToCart(product) {
@@ -1039,6 +1042,8 @@ async function placeAllOrders() {
   showResult(true, 'All Orders Placed! 🎉', `${successCount} order(s) confirmed. We'll contact you at ${phone}.`, 'CART-' + Date.now().toString().slice(-6));
 }
 
+  cart = JSON.parse(localStorage.getItem('sreecart') || '[]');
+  updateCartUI();
   loadProducts();
   </script>
 

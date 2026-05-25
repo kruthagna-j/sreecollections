@@ -142,7 +142,10 @@ td,th{padding:0.7rem}
 <div class="tab-content" id="tab-orders">
 <div class="section-header">
 <h2 class="section-title">Orders</h2>
-<button class="btn-danger" onclick="clearAllOrders()"><i class="fas fa-trash"></i> Clear All Orders</button>
+<div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+  <button class="btn-primary" style="background:#1a3a2a;color:#27ae60;border:1px solid rgba(39,174,96,0.3)" onclick="exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+  <button class="btn-danger" onclick="clearAllOrders()"><i class="fas fa-trash"></i> Clear All Orders</button>
+</div>
 </div>
 <div class="table-container">
 <table id="ordersTable">
@@ -269,6 +272,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
   event.target.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'dashboard') loadDashboard();
   if (tab === 'products') loadProducts();
   if (tab === 'orders') loadOrders();
 }
@@ -579,6 +583,30 @@ async function loadDashboard() {
     </div>
   `;
 }
+
+async function exportCSV() {
+  const orders = await sbFetch('GET', 'orders', null, 'order=created_at.desc');
+  if (!orders || orders.length === 0) { alert('No orders to export.'); return; }
+  const headers = ['Order ID','Customer Name','Phone','Product','Qty','Price','Total','Payment','Status','Date'];
+  const rows = orders.map(o => [
+    o.id.toString().substring(0,8).toUpperCase(),
+    `"${o.customer_name}"`,
+    o.customer_phone,
+    `"${o.product_name}"`,
+    o.quantity,
+    o.product_price,
+    Number(o.product_price) * Number(o.quantity),
+    o.payment_method,
+    o.status,
+    new Date(o.created_at).toLocaleDateString('en-IN')
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = `SreeCollections_Orders_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+
 loadStats();
 loadProducts();
 </script>
