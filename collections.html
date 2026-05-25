@@ -855,8 +855,8 @@ function updateCartUI() {
       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
         <span style="font-weight:700;font-size:0.9rem">${item.name}</span>
         <div style="display:flex;gap:0.5rem;align-items:center">
-          <button onclick="buySingleFromCart(${idx})" style="padding:0.3rem 0.8rem;background:var(--gold);color:var(--dark);border:none;cursor:pointer;font-size:0.75rem;font-family:'Manrope',sans-serif;font-weight:700">Buy</button>
-          <button onclick="removeFromCart(${idx})" style="width:24px;height:24px;background:rgba(231,76,60,0.15);border:1px solid #e74c3c;color:#e74c3c;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center">✕</button>
+          <button onclick="buySingleFromCart(${idx})" style="padding:0.3rem 0.8rem;background:var(--gold);color:var(--dark);border:none;cursor:pointer;font-size:0.75rem;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;transition:background 0.3s" onmouseover="this.style.background='#E8C98B'" onmouseout="this.style.background='var(--gold)'">Buy</button>
+          <button onclick="removeFromCart(${idx})" style="width:26px;height:26px;background:transparent;border:1px solid rgba(200,169,107,0.3);color:var(--muted);cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s" onmouseover="this.style.borderColor='#e74c3c';this.style.color='#e74c3c'" onmouseout="this.style.borderColor='rgba(200,169,107,0.3)';this.style.color='var(--muted)'">✕</button>
         </div>
       </div>
       <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem">${item.category}</div>
