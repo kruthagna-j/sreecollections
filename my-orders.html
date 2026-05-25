@@ -439,13 +439,14 @@ function showToast(message, type = 'success') {
 function getTracker(status) {
   const steps = [
     { key: 'placed', icon: '🛍️', label: 'Placed' },
-    { key: 'processing', icon: '📦', label: 'Shipped' },
+    { key: 'shipping', icon: '🚚', label: 'Shipping' },
+    { key: 'shipped', icon: '📦', label: 'Shipped' },
     { key: 'delivered', icon: '🎁', label: 'Delivered' }
   ];
   if (status === 'cancelled') {
     return `<div style="padding:0.8rem;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:4px;text-align:center;color:#e74c3c;font-size:0.85rem;margin:1rem 0">❌ This order has been cancelled</div>`;
   }
-  const order = ['placed', 'processing', 'delivered'];
+  const order = ['placed', 'shipping', 'shipped', 'delivered'];
   const currentIndex = order.indexOf(status);
   return `<div class="tracker">${steps.map((step, i) => {
     const isDone = i < currentIndex;
