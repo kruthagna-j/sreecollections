@@ -90,6 +90,15 @@ td,th{padding:0.7rem}
 <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" id="statRevenue">₹0</div></div>
 </div>
 
+<!-- LOW STOCK / OUT OF STOCK ALERT -->
+<div id="lowStockAlert" style="display:none;background:#2a1500;border:1px solid #e67e22;padding:1rem 1.5rem;margin-bottom:1.5rem;align-items:flex-start;gap:1rem">
+  <i class="fas fa-exclamation-triangle" style="color:#e67e22;margin-top:0.2rem;flex-shrink:0"></i>
+  <div>
+    <div style="font-weight:700;color:#e67e22;margin-bottom:0.4rem">⚠️ Stock Alert</div>
+    <div id="lowStockList" style="font-size:0.85rem;color:#f0a060;line-height:1.8"></div>
+  </div>
+</div>
+
 <div class="tabs">
 <button class="tab" onclick="switchTab('dashboard')">📊 Dashboard</button>
 <button class="tab active" onclick="switchTab('products')">Products</button>
@@ -210,10 +219,11 @@ td,th{padding:0.7rem}
 <input type="url" id="prodImage" placeholder="https://...">
 </div>
 <div class="form-group">
-<label>In Stock</label>
+<label>Stock Status</label>
 <select id="prodStock">
-<option value="true">Yes</option>
-<option value="false">No</option>
+<option value="instock">✅ In Stock</option>
+<option value="lowstock">⚠️ Low Stock</option>
+<option value="outofstock">❌ Out of Stock</option>
 </select>
 </div>
 <div style="display:flex;gap:1rem;margin-top:2rem">
@@ -283,6 +293,24 @@ async function loadStats() {
   
   document.getElementById('statProducts').textContent = products ? products.length : 0;
   document.getElementById('statOrders').textContent = orders ? orders.length : 0;
+
+  // Low stock alert
+  if (products) {
+    const outOfStock = products.filter(p => p.stock_status === 'outofstock' || (!p.stock_status && !p.in_stock));
+    const lowStock = products.filter(p => p.stock_status === 'lowstock');
+    const alertBox = document.getElementById('lowStockAlert');
+    const alertList = document.getElementById('lowStockList');
+    if (outOfStock.length > 0 || lowStock.length > 0) {
+      alertBox.style.display = 'flex';
+      const lines = [
+        ...lowStock.map(p => `⚠️ <strong>${p.name}</strong> (${p.category}) — Low Stock`),
+        ...outOfStock.map(p => `❌ <strong>${p.name}</strong> (${p.category}) — Out of Stock`)
+      ];
+      alertList.innerHTML = lines.join('<br>');
+    } else {
+      alertBox.style.display = 'none';
+    }
+  }
   
   if (orders) {
     const pending = orders.filter(o => o.status === 'placed').length;
@@ -307,7 +335,7 @@ async function loadProducts() {
       <td><strong>${p.name}</strong></td>
       <td>${p.category}</td>
       <td>₹${Number(p.price).toLocaleString('en-IN')}</td>
-      <td><span class="badge ${p.in_stock ? 'badge-success' : 'badge-pending'}">${p.in_stock ? 'In Stock' : 'Out of Stock'}</span></td>
+      <td><span class="badge ${p.stock_status === 'instock' ? 'badge-success' : p.stock_status === 'lowstock' ? 'badge-pending' : 'badge-cod'}" style="${p.stock_status === 'outofstock' ? 'background:rgba(231,76,60,0.2);color:#e74c3c;border-color:rgba(231,76,60,0.3)' : ''}">${p.stock_status === 'instock' ? '✅ In Stock' : p.stock_status === 'lowstock' ? '⚠️ Low Stock' : '❌ Out of Stock'}</span></td>
       <td>
         <div class="action-btns">
 <button class="btn-small" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
@@ -373,7 +401,7 @@ function openProductModal(id = null) {
         document.getElementById('prodPrice').value = p.price;
         document.getElementById('prodDesc').value = p.description || '';
         document.getElementById('prodImage').value = p.image_url || '';
-        document.getElementById('prodStock').value = p.in_stock.toString();
+        document.getElementById('prodStock').value = p.stock_status || (p.in_stock ? 'instock' : 'outofstock');
       }
     });
   }
@@ -395,7 +423,8 @@ document.getElementById('productForm').addEventListener('submit', async function
     price: Number(document.getElementById('prodPrice').value),
     description: document.getElementById('prodDesc').value.trim() || null,
     image_url: document.getElementById('prodImage').value.trim() || null,
-    in_stock: document.getElementById('prodStock').value === 'true'
+    stock_status: document.getElementById('prodStock').value,
+in_stock: document.getElementById('prodStock').value === 'instock'
   };
   
   if (currentEditId) {
@@ -612,8 +641,28 @@ async function exportCSV() {
   a.click();
 }
 
+let lastOrderCount = 0;
+async function checkNewOrders() {
+  const orders = await sbFetch('GET', 'orders', null, 'select=id');
+  if (!orders) return;
+  if (lastOrderCount > 0 && orders.length > lastOrderCount) {
+    const diff = orders.length - lastOrderCount;
+    if (Notification.permission === 'granted') {
+      new Notification('🛍️ New Order!', { body: `${diff} new order(s) received on Sree Collections!`, icon: '/favicon.ico' });
+    }
+  }
+  lastOrderCount = orders.length;
+}
+
+function startOrderPolling() {
+  if (Notification.permission === 'default') Notification.requestPermission();
+  setInterval(checkNewOrders, 30000); // check every 30 seconds
+  checkNewOrders();
+}
+
 loadStats();
 loadProducts();
+startOrderPolling();
 </script>
 
 </body>

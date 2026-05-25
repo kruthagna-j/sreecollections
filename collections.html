@@ -251,7 +251,9 @@
   <textarea id="custAddress" rows="2" placeholder="Enter your full delivery address"></textarea>
       </div>
       <div class="form-group">
-        <label>Quantity</label>
+        <label>🎁 Gift Message <span style="color:var(--muted);font-size:0.7rem">(optional)</span></label>
+        <textarea id="giftMessage" rows="2" placeholder="e.g. Happy Birthday! Wishing you all the best 🎂" style="width:100%;padding:0.75rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-size:0.9rem;font-family:'Manrope',sans-serif"></textarea>
+      </div>
         <div class="qty-control">
           <button class="qty-btn" onclick="changeQty(-1)">−</button>
           <span class="qty-val" id="qtyVal">1</span>
@@ -373,20 +375,25 @@
     noP.style.display = 'none';
     grid.innerHTML = products.map(p => `
       <div class="product-card">
-        ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" class="product-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
+        ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" class="product-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
         <div class="product-img-placeholder" style="${p.image_url ? 'display:none' : ''}">🎁</div>
         <div class="product-body">
           <div class="product-category">${p.category}</div>
           <div class="product-name">${p.name}</div>
           <div class="product-desc">${p.description || ''}</div>
           <div class="product-price">₹${Number(p.price).toLocaleString('en-IN')} <span>incl. taxes</span></div>
-          <div style="display:flex;gap:0.5rem">
+          <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem">
             <button class="btn-buy" style="flex:1" onclick='openOrder(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
               <i class="fas fa-bolt"></i> Buy Now
             </button>
             <button class="btn-buy" style="width:48px;background:var(--charcoal);border:1px solid var(--gold)" onclick='addToCart(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
               <i class="fas fa-cart-plus" style="color:var(--gold)"></i>
             </button>
+          </div>
+          <div style="display:flex;gap:0.5rem">
+            <a href="https://wa.me/917207186844?text=${encodeURIComponent('Hi! I want to order: ' + p.name + ' (₹' + Number(p.price).toLocaleString('en-IN') + ')')}" target="_blank" style="flex:1;padding:0.6rem;background:#25D366;color:white;border:none;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:Manrope,sans-serif;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:0.3rem"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <button onclick="shareOnWhatsApp('${p.name.replace(/'/g,"\\'")}', ${p.price})" style="flex:1;padding:0.6rem;background:var(--charcoal);color:var(--gold);border:1px solid var(--border);font-size:0.78rem;font-weight:700;cursor:pointer;font-family:Manrope,sans-serif"><i class="fas fa-share-alt"></i> Share</button>
+            ${!p.in_stock ? `<button onclick="notifyMe('${p.name.replace(/'/g,"\\'")}', '${p.id}')" style="flex:1;padding:0.6rem;background:var(--charcoal);color:#f1c40f;border:1px solid rgba(241,196,15,0.3);font-size:0.78rem;font-weight:700;cursor:pointer;font-family:Manrope,sans-serif"><i class="fas fa-bell"></i> Notify Me</button>` : ''}
           </div>
         </div>
       </div>
@@ -642,7 +649,8 @@ document.getElementById('otpInput').select();
       payment_method: method,
       payment_status: payStatus,
       razorpay_payment_id: payId || null,
-      status: 'placed'
+      status: 'placed',
+      gift_message: document.getElementById('giftMessage')?.value.trim() || null
     };
     const result = await sbFetch('POST', 'orders', orderData);
     closeModal();
@@ -962,6 +970,7 @@ function openOrderFromCart() {
   document.getElementById('custPhone').value = '';
   document.getElementById('custEmail').value = '';
   document.getElementById('custAddress').value = '';
+  if (document.getElementById('giftMessage')) document.getElementById('giftMessage').value = '';
   document.getElementById('verifyEmailSection').style.display = 'none';
   document.getElementById('otpInput').value = '';
   document.getElementById('verifyBtn').style.display = 'none';
@@ -1043,6 +1052,20 @@ async function placeAllOrders() {
 
   cart = JSON.parse(localStorage.getItem('sreecart') || '[]');
   updateCartUI();
+
+function shareOnWhatsApp(name, price) {
+  const msg = `🎁 Check out this amazing gift at Sree Collections, Kurnool!\n\n*${name}* — ₹${Number(price).toLocaleString('en-IN')}\n\nOrder now: https://sreecollections.vercel.app/collections.html`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function notifyMe(name, productId) {
+  const phone = prompt('Enter your WhatsApp number to get notified when "' + name + '" is back in stock:');
+  if (!phone) return;
+  const msg = `Hi! Please notify me on WhatsApp when "${name}" (ID: ${productId}) is back in stock. My number: ${phone}`;
+  window.open('https://wa.me/917207186844?text=' + encodeURIComponent(msg), '_blank');
+  alert('✅ Request sent! We will notify you when it is back in stock.');
+}
+
   loadProducts();
   </script>
 
