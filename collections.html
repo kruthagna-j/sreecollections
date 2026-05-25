@@ -854,8 +854,10 @@ function updateCartUI() {
     <div style="background:var(--card-bg);border:1px solid var(--border);padding:1rem;margin-bottom:0.8rem">
       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
         <span style="font-weight:700;font-size:0.9rem">${item.name}</span>
-        <button onclick="removeFromCart(${idx})" style="background:none;border:none;color:#e74c3c;cursor:pointer">✕</button>
-        <button onclick="buySingleFromCart(${idx})" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.75rem;font-family:'Manrope',sans-serif;font-weight:700">Buy</button>
+        <div style="display:flex;gap:0.5rem;align-items:center">
+          <button onclick="buySingleFromCart(${idx})" style="padding:0.3rem 0.8rem;background:var(--gold);color:var(--dark);border:none;cursor:pointer;font-size:0.75rem;font-family:'Manrope',sans-serif;font-weight:700">Buy</button>
+          <button onclick="removeFromCart(${idx})" style="width:24px;height:24px;background:rgba(231,76,60,0.15);border:1px solid #e74c3c;color:#e74c3c;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center">✕</button>
+        </div>
       </div>
       <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem">${item.category}</div>
       <div style="display:flex;justify-content:space-between;align-items:center">
