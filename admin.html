@@ -435,8 +435,9 @@ async function updateOrderStatus(id, status) {
   if (!o.customer_email) return;
   
   const statusMessages = {
-  processing: 'Order Shipped 🚚',
-  delivered: 'Order Delivered 📦',
+  shipping: 'Order Shipping 🚚',
+  shipped: 'Order Shipped 📦',
+  delivered: 'Order Delivered 🎁',
   cancelled: 'Order Cancelled ❌',
   placed: 'Order Confirmed ✅'
 };  

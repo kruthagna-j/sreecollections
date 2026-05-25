@@ -445,14 +445,14 @@ function getTracker(status) {
   if (status === 'cancelled') {
     return `<div style="padding:0.8rem;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:4px;text-align:center;color:#e74c3c;font-size:0.85rem;margin:1rem 0">❌ This order has been cancelled</div>`;
   }
-  const order = ['placed','processing','delivered'];
+  const order = ['placed', 'processing', 'delivered'];
   const currentIndex = order.indexOf(status);
   return `<div class="tracker">${steps.map((step, i) => {
     const isDone = i < currentIndex;
     const isActive = i === currentIndex;
     return `<div class="tracker-step ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}">
       <div class="tracker-icon">${step.icon}</div>
-      <div class="tracker-label">${step.label}</div>
+      <div class="tracker-label">${isDone ? '✓ ' : ''}${step.label}</div>
     </div>`;
   }).join('')}</div>`;
 }
