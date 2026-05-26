@@ -354,11 +354,18 @@ const orders = await sbFetch(
     return; 
   }
   emptyState.style.display = 'none';
-  el.innerHTML = orders.map(o => `
+  el.innerHTML = orders.map((o, index) => `
     <div style="background:var(--card-bg);border:1px solid var(--border);padding:1.5rem;margin-bottom:1.5rem;border-radius:4px">
 
       <!-- Order Header -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--dark);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0">${index + 1}</div>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--text)">Order #${o.id.toString().slice(-8)}</span>
+        <span style="margin-left:auto;display:inline-block;padding:0.35rem 0.8rem;background:${o.status === 'cancelled' ? 'rgba(231,76,60,0.15)' : o.status === 'delivered' ? 'rgba(76,175,80,0.15)' : 'rgba(200,169,107,0.12)'};color:${o.status === 'cancelled' ? '#e74c3c' : o.status === 'delivered' ? '#4CAF50' : 'var(--gold)'};border-radius:2px;font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em">
+          ${o.status === 'cancelled' ? (o.cancelled_by === 'customer' ? '❌ Cancelled by you' : '❌ Cancelled by Admin') : o.status}
+        </span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
         <div>
           <span style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.3rem">Order ID</span>
           <span style="font-size:1rem;font-weight:600;color:var(--gold)">#${o.id.toString().slice(-8)}</span>
@@ -366,12 +373,6 @@ const orders = await sbFetch(
         <div>
           <span style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.3rem">Date</span>
           <span style="color:var(--text);font-size:0.85rem;font-weight:500">${new Date(o.created_at).toLocaleString('en-IN', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</span>
-        </div>
-        <div>
-          <span style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.3rem">Status</span>
-          <span style="display:inline-block;padding:0.35rem 0.8rem;background:${o.status === 'cancelled' ? 'rgba(231,76,60,0.15)' : o.status === 'delivered' ? 'rgba(76,175,80,0.15)' : 'rgba(200,169,107,0.12)'};color:${o.status === 'cancelled' ? '#e74c3c' : o.status === 'delivered' ? '#4CAF50' : 'var(--gold)'};border-radius:2px;font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em">
-            ${o.status === 'cancelled' ? (o.cancelled_by === 'customer' ? '❌ Cancelled by you' : '❌ Cancelled by Admin') : o.status}
-          </span>
         </div>
       </div>
 
