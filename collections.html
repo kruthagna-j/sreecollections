@@ -187,6 +187,20 @@
       <input type="tel" id="cartCustPhone" placeholder="+91 XXXXX XXXXX">
     </div>
     <div class="form-group">
+      <label>Email Address <span style="color:var(--gold);font-size:0.7rem">* required for OTP</span></label>
+      <input type="email" id="cartCustEmail" placeholder="your@email.com">
+      <button type="button" id="cartVerifyBtn" onclick="sendCartVerificationCode()" style="display:none;margin-top:0.6rem;padding:0.6rem 1.2rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;font-size:0.82rem">
+        ✉ Send Verification Code
+      </button>
+    </div>
+    <div id="cartVerifyEmailSection" style="display:none;margin-bottom:1.2rem">
+      <label style="display:block;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">Enter Verification Code</label>
+      <div style="display:flex;gap:0.5rem">
+        <input type="text" id="cartOtpInput" placeholder="6-digit code" maxlength="6" style="flex:1;padding:0.75rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-size:0.9rem;font-family:'Manrope',sans-serif">
+        <button onclick="verifyCartOTP()" style="padding:0.75rem 1.2rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">✓ Verify</button>
+      </div>
+    </div>
+    <div class="form-group">
       <label>Delivery Address *</label>
       <textarea id="cartCustAddress" rows="2" placeholder="Enter your full delivery address"></textarea>
     </div>
@@ -205,7 +219,7 @@
     </div>
    <div class="modal-btns">
         <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-confirm" id="cartConfirmBtn" onclick="placeAllOrders()">
+        <button class="btn-confirm" id="cartConfirmBtn" onclick="placeAllOrders()" style="opacity:0.5" disabled>
   <i class="fas fa-shopping-bag"></i> Confirm All Orders
 </button>
       </div>
@@ -985,6 +999,14 @@ function openCartCheckoutModal() {
     </div>
   `).join('');
   document.getElementById('cartCheckoutTotal').textContent = '₹' + total.toLocaleString('en-IN');
+  cartEmailVerified = false;
+  cartGeneratedOTP = '';
+  document.getElementById('cartCustEmail').value = '';
+  document.getElementById('cartVerifyBtn').style.display = 'none';
+  document.getElementById('cartVerifyEmailSection').style.display = 'none';
+  document.getElementById('cartOtpInput').value = '';
+  document.getElementById('cartConfirmBtn').disabled = true;
+  document.getElementById('cartConfirmBtn').style.opacity = '0.5';
   document.getElementById('cartCheckoutModal').classList.add('active');
 }
 function openOrderFromCart() {
@@ -1053,8 +1075,11 @@ function selectCartPayment(method) {
 async function placeAllOrders() {
   const name = document.getElementById('cartCustName').value.trim();
   const phone = document.getElementById('cartCustPhone').value.trim();
+  const email = document.getElementById('cartCustEmail').value.trim();
   const address = document.getElementById('cartCustAddress').value.trim();
   if (!name || !phone) { alert('Please enter your name and phone number.'); return; }
+  if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+  if (!cartEmailVerified) { alert('Please verify your email first.'); return; }
   if (!address) { alert('Please enter your delivery address.'); return; }
 
   document.getElementById('cartCheckoutModal').classList.remove('active');
@@ -1097,6 +1122,65 @@ function notifyMe(name, productId) {
   const msg = `Hi! Please notify me on WhatsApp when "${name}" (ID: ${productId}) is back in stock. My number: ${phone}`;
   window.open('https://wa.me/917207186844?text=' + encodeURIComponent(msg), '_blank');
   alert('✅ Request sent! We will notify you when it is back in stock.');
+}
+
+let cartGeneratedOTP = '';
+let cartEmailVerified = false;
+
+document.getElementById('cartCustEmail').addEventListener('blur', function() {
+  const email = this.value.trim();
+  if (email && email.includes('@')) {
+    document.getElementById('cartVerifyBtn').style.display = 'inline-block';
+  } else {
+    document.getElementById('cartVerifyBtn').style.display = 'none';
+    cartEmailVerified = false;
+    document.getElementById('cartConfirmBtn').disabled = true;
+    document.getElementById('cartConfirmBtn').style.opacity = '0.5';
+  }
+});
+
+async function sendCartVerificationCode() {
+  const email = document.getElementById('cartCustEmail').value.trim();
+  const name = document.getElementById('cartCustName').value.trim();
+  if (!email || !email.includes('@')) { alert('Please enter a valid email address'); return; }
+  if (!name) { alert('Please enter your name first'); return; }
+  const btn = document.getElementById('cartVerifyBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  cartGeneratedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_OTP_TEMPLATE_ID, {
+      customer_email: email,
+      to_name: name,
+      otp_code: cartGeneratedOTP,
+      message: `Your verification code is: ${cartGeneratedOTP}`
+    });
+    document.getElementById('cartVerifyEmailSection').style.display = 'block';
+    document.getElementById('cartOtpInput').focus();
+    btn.innerHTML = '<i class="fas fa-check"></i> Code Sent';
+    btn.style.background = '#27ae60';
+    setTimeout(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-redo"></i> Resend Code'; btn.style.background = 'var(--gold)'; }, 3000);
+    alert('✓ Verification code sent to ' + email);
+  } catch(e) {
+    alert('Could not send verification code. Please try again.');
+    btn.disabled = false;
+    btn.innerHTML = '✉ Send Verification Code';
+  }
+}
+
+function verifyCartOTP() {
+  const entered = document.getElementById('cartOtpInput').value.trim();
+  if (!entered) { alert('Please enter the verification code'); return; }
+  if (entered === cartGeneratedOTP) {
+    cartEmailVerified = true;
+    document.getElementById('cartVerifyEmailSection').innerHTML = '<p style="color:#27ae60;font-size:0.85rem;margin:0"><i class="fas fa-check-circle"></i> Email verified successfully!</p>';
+    document.getElementById('cartConfirmBtn').disabled = false;
+    document.getElementById('cartConfirmBtn').style.opacity = '1';
+    alert('✓ Email verified! You can now confirm your order.');
+  } else {
+    alert('❌ Invalid code. Please try again.');
+    document.getElementById('cartOtpInput').value = '';
+  }
 }
 
   loadProducts();
