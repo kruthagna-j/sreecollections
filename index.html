@@ -312,11 +312,15 @@ function checkPin() {
   if (pin.length !== 6 || isNaN(pin)) {
     res.innerHTML = '<span style="color:#e74c3c">⚠️ Enter a valid 6-digit pincode.</span>'; return;
   }
-  const serviceable = ['518001','518002','518003','518004','518005','518006','518007','518010','518301','518302','518303','518380','518395','518396','518401','518402','518411','518412','518422','518432','518442','518452','518462','518464','518466','518467','518468','518501','518502','518503','518510','518511','518512','518523','518533','518543','518553','518563','518573','518583','518593','518598','518599'];
-  if (serviceable.includes(pin)) {
+  const num = parseInt(pin);
+
+// Andhra Pradesh + Telangana full range
+const isAPTS = (num >= 500001 && num <= 534999);
+
+if (isAPTS) {
     res.innerHTML = '✅ <strong style="color:#27ae60">Great news!</strong> We deliver to your area. <a href="https://wa.me/917207186844" target="_blank" style="color:var(--gold)">Order on WhatsApp →</a>';
   } else {
-    res.innerHTML = '📞 <strong style="color:var(--gold)">Call us</strong> at <a href="tel:+917207186844" style="color:var(--gold)">+91 72071 86844</a> to check delivery to your area.';
+    res.innerHTML = '❌ <strong style="color:#e74c3c">Sorry!</strong> We currently do not deliver to this area.';
   }
 }
 document.getElementById('pinInput')?.addEventListener('keydown', e => { if(e.key==='Enter') checkPin(); });
