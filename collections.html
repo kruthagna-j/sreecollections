@@ -238,7 +238,6 @@
           ✉ Send Verification Code
         </button>
       </div>
-
       <div id="verifyEmailSection" style="display:none;margin-bottom:1.2rem">
         <label style="display:block;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">Enter Verification Code</label>
         <div style="display:flex;gap:0.5rem">
@@ -248,7 +247,7 @@
       </div>
       <div class="form-group">
         <label>Delivery Address *</label>
-  <textarea id="custAddress" rows="2" placeholder="Enter your full delivery address"></textarea>
+        <textarea id="custAddress" rows="2" placeholder="Enter your full delivery address"></textarea>
       </div>
       <div class="form-group">
         <label>🎁 Gift Message <span style="color:var(--muted);font-size:0.7rem">(optional)</span></label>
@@ -256,6 +255,14 @@
       </div>
       <div class="form-group">
         <label>Quantity</label>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-val" id="qtyVal">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Payment Method</label>
         <div class="payment-methods">
           <div class="payment-method selected" id="pm-cod" onclick="selectPayment('cod')">
             <i class="fas fa-money-bill-wave"></i>
@@ -267,6 +274,18 @@
           </div>
         </div>
       </div>
+      <div class="modal-total">
+        <span>Total Amount</span>
+        <strong id="modalTotal">₹0</strong>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-confirm" id="confirmBtn" onclick="confirmOrder()">
+          <i class="fas fa-shopping-bag"></i> Confirm Order
+        </button>
+      </div>
+    </div>
+  </div>
       <div class="modal-total">
         <span>Total Amount</span>
         <strong id="modalTotal">₹0</strong>
