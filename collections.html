@@ -686,6 +686,7 @@ document.getElementById('otpInput').select();
       ? `Thank you ${name}! Order confirmed. We'll contact you at ${phone}.`
       : `Thank you ${name}! Payment received. We'll contact you at ${phone} shortly.`;
     showResult(true, title, msg, shortId);
+    notifyOwnerWhatsApp(name, phone, currentProduct.name, total, shortId);
     if (currentCartIndex < cart.length - 1) {
       currentCartIndex++;
       setTimeout(() => {
@@ -1053,6 +1054,10 @@ async function placeAllOrders() {
 
   document.getElementById('cartCheckoutModal').classList.remove('active');
 
+  const cartSnapshot = [...cart];
+  const cartTotalAmt = cart.reduce((s, i) => s + (Number(i.price) * i.qty), 0);
+  const cartProductNames = cart.map(i => `${i.name} x${i.qty}`).join(', ');
+
   let successCount = 0;
   for (const item of cart) {
     const orderData = {
@@ -1071,10 +1076,27 @@ async function placeAllOrders() {
     if (result) successCount++;
   }
 
-  cart = [];
+ cart = [];
   updateCartUI();
   lastOrder = null;
-  showResult(true, 'All Orders Placed! 🎉', `${successCount} order(s) confirmed. We'll contact you at ${phone}.`, 'CART-' + Date.now().toString().slice(-6));
+  const cartOrderId = 'CART-' + Date.now().toString().slice(-6);
+  showResult(true, 'All Orders Placed! 🎉', `${successCount} order(s) confirmed. We'll contact you at ${phone}.`, cartOrderId);
+  notifyOwnerWhatsApp(name, phone, cartProductNames, cartTotalAmt, cartOrderId);
+  
+  // Send owner email
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      customer_email: OWNER_EMAIL,
+      customer_name: name + ' (NEW CART ORDER)',
+      customer_phone: phone,
+      order_id: cartOrderId,
+      product_name: `${successCount} item(s) ordered`,
+      quantity: successCount,
+      total_amount: '₹' + cartTotalAmt.toLocaleString('en-IN'),
+      product_name: cartProductNames,
+      payment_method: cartPaymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'
+    });
+  } catch(e) { console.error('Owner email error:', e); }
 }
 
   cart = JSON.parse(localStorage.getItem('sreecart') || '[]');
@@ -1159,6 +1181,17 @@ function verifyCartOTP() {
     alert('❌ Invalid code. Please try again.');
     document.getElementById('cartOtpInput').value = '';
   }
+}
+
+function notifyOwnerWhatsApp(name, phone, product, total, orderId) {
+  const msg = `🛍️ *NEW ORDER – Sree Collections*\n\n` +
+    `Order ID: ${orderId}\n` +
+    `Customer: ${name}\n` +
+    `Phone: ${phone}\n` +
+    `Product: ${product}\n` +
+    `Total: ₹${Number(total).toLocaleString('en-IN')}\n\n` +
+    `View in Admin: https://sreecollectionsknl.vercel.app/admin-login.html`;
+  window.open('https://wa.me/917207186844?text=' + encodeURIComponent(msg), '_blank');
 }
 
   loadProducts();
