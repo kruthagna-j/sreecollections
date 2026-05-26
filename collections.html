@@ -205,13 +205,12 @@
     </div>
    <div class="modal-btns">
         <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-confirm" id="confirmBtn" onclick="confirmOrder()">
-          <i class="fas fa-shopping-bag"></i> Confirm Order
-        </button>
+        <button class="btn-confirm" id="cartConfirmBtn" onclick="placeAllOrders()">
+  <i class="fas fa-shopping-bag"></i> Confirm All Orders
+</button>
       </div>
     </div>
-  </div>
-
+  </div>    
   <!-- ORDER MODAL -->
   <div class="modal-overlay" id="orderModal">
     <div class="modal">
@@ -969,6 +968,7 @@ function toggleCart() {
   const isOpen = drawer.style.display === 'block';
   drawer.style.display = isOpen ? 'none' : 'block';
   overlay.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) updateCartUI();
 }
 function checkoutCart() {
   if (cart.length === 0) { alert('Cart is empty'); return; }
