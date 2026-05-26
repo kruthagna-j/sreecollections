@@ -1514,34 +1514,5 @@ applyTheme();
 
 // Sync across tabs
 window.addEventListener('storage', (e) => {
-  if (e.key === 'theme') {
-    applyTheme();
-  }
+  if (e.key === 'theme') applyTheme();
 });
-  </script>
-  <script>
-  function toggleTheme() {
-  const isLight = document.body.classList.toggle('light-mode');
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.textContent = isLight ? '☀️' : '🌙';
-}
-
-function applyTheme() {
-  const isLight = localStorage.getItem('theme') === 'light';
-  document.body.classList.toggle('light-mode', isLight);
-
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.textContent = isLight ? '☀️' : '🌙';
-}
-
-applyTheme();
-if (e.key === 'theme')
-  applyTheme();
-
-  loadProducts();
-
-</script>
-  </body>
-  </html>
