@@ -932,5 +932,20 @@ loadProducts();
 startOrderPolling();
 </script>
 
+<script>
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+
+function applyTheme() {
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light');
+  }
+}
+
+applyTheme();
+</script>
+
 </body>
 </html>
