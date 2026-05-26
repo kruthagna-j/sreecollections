@@ -473,8 +473,9 @@ function focusInput(inputId) {
   }
 
   function closeModal() { 
-    document.getElementById('orderModal').classList.remove('active'); 
-  }
+  document.getElementById('orderModal').classList.remove('active');
+  document.getElementById('cartCheckoutModal').classList.remove('active');
+}
 
   function changeQty(d) {
     currentQty = Math.max(1, currentQty + d);
@@ -1078,6 +1079,15 @@ async function placeAllOrders() {
 
   cart = JSON.parse(localStorage.getItem('sreecart') || '[]');
   updateCartUI();
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.getElementById('orderModal').classList.remove('active');
+      document.getElementById('cartCheckoutModal').classList.remove('active');
+      const drawer = document.getElementById('cartDrawer');
+      if (drawer.style.display === 'block') toggleCart();
+    }
+  });
 
 function shareOnWhatsApp(name, price) {
   const msg = `🎁 Check out this amazing gift at Sree Collections, Kurnool!\n\n*${name}* — ₹${Number(price).toLocaleString('en-IN')}\n\nOrder now: https://sreecollections.vercel.app/collections.html`;
