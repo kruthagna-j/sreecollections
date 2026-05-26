@@ -82,6 +82,21 @@ tr:hover{background:rgba(200,169,107,0.03)}
 .table-container{font-size:0.85rem}
 td,th{padding:0.7rem}
 }
+style>
+:root {
+  --gold: #C8A96B;
+  --dark: #0F0F0F;
+}
+
+body {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.card, nav, .modal, .order-card {
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+  </style>
+}
 </style>
 </head>
 <body>
@@ -933,25 +948,40 @@ startOrderPolling();
 </script>
 
 <script>
-function toggleTheme() {
-  const isLight = document.body.classList.toggle('light-mode');
-
+function setTheme(isLight) {
+  document.body.classList.toggle('light-mode', isLight);
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
 
   const btn = document.getElementById('themeBtn');
   if (btn) btn.textContent = isLight ? '☀️' : '🌙';
 }
 
+// Toggle button
+function toggleTheme() {
+  const isLight = !document.body.classList.contains('light-mode');
+  setTheme(isLight);
+}
+
+// Apply saved or system theme
 function applyTheme() {
-  const isLight = localStorage.getItem('theme') === 'light';
+  const saved = localStorage.getItem('theme');
 
-  document.body.classList.toggle('light-mode', isLight);
+  const systemPrefersLight = window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: light)').matches;
 
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.textContent = isLight ? '☀️' : '🌙';
+  const isLight = saved ? saved === 'light' : systemPrefersLight;
+
+  setTheme(isLight);
 }
 
 applyTheme();
+
+// Sync across tabs
+window.addEventListener('storage', (e) => {
+  if (e.key === 'theme') {
+    applyTheme();
+  }
+});
 </script>
 
 </body>

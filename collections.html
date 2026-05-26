@@ -1473,25 +1473,40 @@ function notifyOwnerWhatsApp(name, phone, product, total, orderId) {
 }
 
   loadProducts();
-  function toggleTheme() {
-  const isLight = document.body.classList.toggle('light-mode');
-
+function setTheme(isLight) {
+  document.body.classList.toggle('light-mode', isLight);
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
 
   const btn = document.getElementById('themeBtn');
   if (btn) btn.textContent = isLight ? '☀️' : '🌙';
 }
 
+// Toggle button
+function toggleTheme() {
+  const isLight = !document.body.classList.contains('light-mode');
+  setTheme(isLight);
+}
+
+// Apply saved or system theme
 function applyTheme() {
-  const isLight = localStorage.getItem('theme') === 'light';
+  const saved = localStorage.getItem('theme');
 
-  document.body.classList.toggle('light-mode', isLight);
+  const systemPrefersLight = window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: light)').matches;
 
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.textContent = isLight ? '☀️' : '🌙';
+  const isLight = saved ? saved === 'light' : systemPrefersLight;
+
+  setTheme(isLight);
 }
 
 applyTheme();
+
+// Sync across tabs
+window.addEventListener('storage', (e) => {
+  if (e.key === 'theme') {
+    applyTheme();
+  }
+});
   </script>
   </body>
   </html>
