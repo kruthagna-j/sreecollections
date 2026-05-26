@@ -216,6 +216,15 @@
       <textarea id="cartCustAddress" rows="2" placeholder="Enter your full delivery address"></textarea>
     </div>
     <div class="form-group">
+  <label>Pincode *</label>
+  <input 
+    type="text" 
+    id="custPincode" 
+    maxlength="6"
+    placeholder="Enter 6-digit pincode"
+  >
+</div>
+    <div class="form-group">
       <label>Payment Method</label>
       <div class="payment-methods">
         <div class="payment-method selected" id="cart-pm-cod" onclick="selectCartPayment('cod')">
@@ -273,6 +282,10 @@
         <label>Delivery Address *</label>
         <textarea id="custAddress" rows="2" placeholder="Enter your full delivery address"></textarea>
       </div>
+      <div class="form-group">
+  <label>Pincode *</label>
+  <input type="text" id="custPincode" maxlength="6" placeholder="Enter 6-digit pincode">
+</div>
       <div class="form-group">
         <label>🎁 Gift Message <span style="color:var(--muted);font-size:0.7rem">(optional)</span></label>
         <textarea id="giftMessage" rows="2" placeholder="e.g. Happy Birthday! Wishing you all the best 🎂" style="width:100%;padding:0.75rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-size:0.9rem;font-family:'Manrope',sans-serif"></textarea>
@@ -490,6 +503,7 @@ function focusInput(inputId) {
     document.getElementById('custPhone').value = '';
     document.getElementById('custEmail').value = '';
     document.getElementById('custAddress').value = '';
+    document.getElementById('custPincode').value = '';
     
     // Reset verification UI
     document.getElementById('verifyEmailSection').style.display = 'none';
@@ -619,6 +633,12 @@ document.getElementById('otpInput').select();
       return; 
     }
     const address = document.getElementById('custAddress').value.trim();
+    const pincode = document.getElementById('custPincode').value.trim();
+
+if (!/^\d{6}$/.test(pincode)) {
+  alert('Please enter a valid 6-digit pincode.');
+  return;
+}
     if (!address) {
       alert('Please enter your delivery address.');
       return;
@@ -688,6 +708,7 @@ document.getElementById('otpInput').select();
       customer_phone: phone,
       customer_email: email,
       customer_address: address || null,
+      customer_pincode: pincode,
       product_id: currentProduct.id,
       product_name: currentProduct.name,
       product_price: currentProduct.price,
@@ -1091,6 +1112,12 @@ async function placeAllOrders() {
   const phone = document.getElementById('cartCustPhone').value.trim();
   const email = document.getElementById('cartCustEmail').value.trim();
   const address = document.getElementById('cartCustAddress').value.trim();
+  const pincode = document.getElementById('cartCustPincode').value.trim();
+
+if (!/^\d{6}$/.test(pincode)) {
+  alert('Please enter a valid 6-digit pincode.');
+  return;
+}
   if (!name || !phone) { alert('Please enter your name and phone number.'); return; }
   if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
   if (!cartEmailVerified) { alert('Please verify your email first.'); return; }
@@ -1108,6 +1135,7 @@ async function placeAllOrders() {
       customer_name: name,
       customer_phone: phone,
       customer_address: address,
+      customer_pincode: pincode,
       product_id: item.id,
       product_name: item.name,
       product_price: item.price,
