@@ -96,7 +96,6 @@ body {
   transition: background 0.3s ease, border-color 0.3s ease;
 }
   </style>
-}
 </style>
 </head>
 <body>
@@ -104,8 +103,15 @@ body {
 <div class="header">
 <div class="logo">Sree Collections Admin</div>
 <div class="header-actions">
+<div class="header-actions">
 <a href="index.html" class="btn" target="_blank"><i class="fas fa-store"></i> Visit Store</a>
-<button class="btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+
+<button class="btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+
+<button class="btn btn-logout" onclick="logout()">
+  <i class="fas fa-sign-out-alt"></i> Logout
+</button>
+</div>
 </div>
 </div>
 
