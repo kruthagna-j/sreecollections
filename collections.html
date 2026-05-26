@@ -254,52 +254,6 @@
       <textarea id="cartCustAddress" rows="2" placeholder="Enter your full delivery address"></textarea>
     </div>
     <div class="form-group">
-
-  <label>Pincode *</label>
-
-  <input 
-    type="text"
-    id="custPincode"
-    maxlength="6"
-    placeholder="Enter 6-digit pincode"
-    oninput="checkDeliveryMessage()"
-    style="
-      width:100%;
-      padding:0.75rem;
-      background:var(--dark);
-      border:1px solid var(--border);
-      color:var(--text);
-      font-size:0.9rem;
-      font-family:'Manrope',sans-serif
-    "
-  >
-
-  <div style="margin-top:0.8rem">
-
-    <div style="
-      font-size:0.95rem;
-      font-weight:700;
-      color:var(--gold);
-      margin-bottom:0.35rem
-    ">
-      Delivery Check
-    </div>
-
-    <div 
-      id="deliveryMessage"
-      style="
-        font-size:0.82rem;
-        color:var(--muted);
-        line-height:1.5
-      "
-    >
-      Do We Deliver to You? Check using your pincode.
-    </div>
-
-  </div>
-
-</div>
-    <div class="form-group">
   <label>Pincode *</label>
   <input 
     type="text"
@@ -369,7 +323,7 @@
         <textarea id="custAddress" rows="2" placeholder="Enter your full delivery address"></textarea>
       </div>
       
-  <div class="form-group" style="margin-bottom:1.5rem">   
+  <div class="form-group" style="margin-bottom:1.5rem">
   <label>Pincode *</label>
   <input 
     type="text"
@@ -377,11 +331,11 @@
     maxlength="6"
     placeholder="Enter 6-digit pincode"
   >
-<div style="height:18px"></div>
+</div>
 <div class="form-group" style="margin-bottom:1.5rem">
-          <label>🎁 Gift Message <span style="color:var(--muted);font-size:0.7rem">(optional)</span></label>
-        <textarea id="giftMessage" rows="2" placeholder="e.g. Happy Birthday! Wishing you all the best 🎂" ></textarea>
-      </div>
+  <label>🎁 Gift Message <span style="color:var(--muted);font-size:0.7rem">(optional)</span></label>
+  <textarea id="giftMessage" rows="2" placeholder="e.g. Happy Birthday! Wishing you all the best 🎂"></textarea>
+</div>
       <div class="form-group">
         <label>Quantity</label>
         <div class="qty-control">
@@ -454,59 +408,11 @@
   let pincodeVerified = false;
 
 function isValidServicePincode(pincode) {
-
   const num = parseInt(pincode);
-
-  // Entire Telangana + Andhra Pradesh
   return (num >= 500001 && num <= 534999);
-
-}
-function checkDeliveryMessage() {
-function isValidServicePincode(pincode) {
-
-  const num = parseInt(pincode);
-
-  // Entire Telangana + Andhra Pradesh
-  return (num >= 500001 && num <= 534999);
-
-}
-  const pincode = document.getElementById('custPincode').value.trim();
-
-  const msg = document.getElementById('deliveryMessage');
-
-  if (/^\d{6}$/.test(pincode)) {
-
-    if (isValidServicePincode(pincode)) {
-
-      msg.innerHTML = '✅ Yes! We deliver to your area.';
-      msg.style.color = '#27ae60';
-
-    } else {
-
-      msg.innerHTML = '❌ Sorry, we currently do not deliver to this area.';
-      msg.style.color = '#e74c3c';
-    }
-
-  } else {
-
-    msg.innerHTML = 'Do We Deliver to You? Check using your pincode.';
-    msg.style.color = 'var(--muted)';
-  }
 }
 
-  // Andhra Pradesh pincodes
-  if (/^5(1|2|3)\d{4}$/.test(pincode)) {
-    return true;
-  }
-
-  // Telangana pincodes
-  if (/^50\d{4}$/.test(pincode)) {
-    return true;
-  }
-
-  return false;
-  
-  async function sbFetch(method, table, body, filter) {
+async function sbFetch(method, table, body, filter) {
     let url = `${SUPABASE_URL}/rest/v1/${table}`;
     if (filter) url += `?${filter}`;
     try {
@@ -782,17 +688,12 @@ document.getElementById('otpInput').select();
     const pincode = document.getElementById('custPincode').value.trim();
 
 if (!/^\d{6}$/.test(pincode)) {
-  alert('Please enter valid 6-digit pincode.');
+  alert('Please enter a valid 6-digit pincode.');
   return;
 }
 
 if (!isValidServicePincode(pincode)) {
   alert('Sorry, delivery available only in Andhra Pradesh and Telangana.');
-  return;
-}
-
-if (!/^\d{6}$/.test(pincode)) {
-  alert('Please enter a valid 6-digit pincode.');
   return;
 }
     if (!address) {
@@ -864,7 +765,7 @@ if (!/^\d{6}$/.test(pincode)) {
       customer_phone: phone,
       customer_email: email,
       customer_address: address || null,
-      customer_pincode: pincode,
+      customer_pincode: document.getElementById('custPincode').value.trim(),
       product_id: currentProduct.id,
       product_name: currentProduct.name,
       product_price: currentProduct.price,
@@ -898,12 +799,6 @@ if (!/^\d{6}$/.test(pincode)) {
     sendPushToAll(
   '🛍️ New Order Received!',
   `${name} ordered ${currentProduct.name} — ₹${total.toLocaleString('en-IN')}`,
-  '/admin-login.html'
-);
-
-sendPushToAll(
-  '🛍️ New Cart Order!',
-  `${name} placed ${successCount} order(s) — ₹${cartTotalAmt.toLocaleString('en-IN')}`,
   '/admin-login.html'
 );
 

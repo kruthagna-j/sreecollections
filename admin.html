@@ -111,9 +111,9 @@ td,th{padding:0.7rem}
 </div>
 
 <div class="tabs">
-<button class="tab" onclick="switchTab('dashboard')">📊 Dashboard</button>
-<button class="tab active" onclick="switchTab('products')">Products</button>
-<button class="tab" onclick="switchTab('orders')">Orders</button>
+<button class="tab" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+<button class="tab active" onclick="switchTab('products', this)">Products</button>
+<button class="tab" onclick="switchTab('orders', this)">Orders</button>
 </div>
 
 
@@ -309,10 +309,10 @@ async function sbFetch(method, table, body, filter) {
   }
 }
 
-function switchTab(tab) {
+function switchTab(tab, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-  event.target.classList.add('active');
+  el.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'dashboard') loadDashboard();
   if (tab === 'products') loadProducts();
@@ -549,15 +549,16 @@ if (statusMessages[status]) {
         template_id: 'template_detul3i',
         user_id: '9fGahlws55ZA4Hq9S',
         template_params: {
-          customer_email: o.customer_email,
-          customer_name: o.customer_name,
-          customer_phone: o.customer_phone,
-          order_id: o.id.toString().substring(0,8).toUpperCase(),
-          product_name: o.product_name,
-          quantity: o.quantity,
-          total_amount: '₹' + (Number(o.product_price) * Number(o.quantity)).toLocaleString('en-IN'),
-          payment_method: statusMessages[status] || 'Order status updated.'
-        }
+  customer_email: o.customer_email,
+  customer_name: o.customer_name,
+  customer_phone: o.customer_phone,
+  order_id: o.id.toString().substring(0,8).toUpperCase(),
+  product_name: o.product_name,
+  quantity: o.quantity,
+  total_amount: '₹' + (Number(o.product_price) * Number(o.quantity)).toLocaleString('en-IN'),
+  payment_method: o.payment_method === 'cod' ? 'Cash on Delivery' : 'Online Payment',
+  order_status: statusMessages[status] || 'Order status updated.'
+}
       })
     });
   } catch(e) {

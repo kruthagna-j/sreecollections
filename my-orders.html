@@ -438,11 +438,35 @@ const orders = await sbFetch(
   `).join('');
 }
 
+function closeCancelModal() {
+  document.getElementById('cancelModal').classList.remove('active');
+  pendingCancelId = null;
+  pendingCancelPhone = null;
+}
+
+function confirmCancel() {
+  executeCancelOrder();
+  closeCancelModal();
+}
+  if (!pendingCancelId) return;
+  cancelOrder(pendingCancelId, pendingCancelPhone);
+  closeCancelModal();
+  
+let pendingCancelId = null;
+let pendingCancelPhone = null;
 async function cancelOrder(id, phone) {
-  if (!confirm('Are you sure you want to cancel this order?')) return;
-  await sbFetch('PATCH', 'orders', { status: 'cancelled', cancelled_by: 'customer' }, `id=eq.${id}`);
+  pendingCancelId = id;
+  pendingCancelPhone = phone;
+  document.getElementById('cancelOrderId').textContent = '#' + id.toString().slice(-8).toUpperCase();
+  document.getElementById('cancelModal').classList.add('active');
+}
+
+async function executeCancelOrder() {
+  if (!pendingCancelId) return;
+  await sbFetch('PATCH', 'orders', { status: 'cancelled', cancelled_by: 'customer' }, `id=eq.${pendingCancelId}`);
   showToast('Order cancelled successfully', 'success');
-  document.getElementById('myOrdersPhone').value = phone;
+  document.getElementById('myOrdersPhone').value = pendingCancelPhone;
+  closeCancelModal();
   loadMyOrders();
 }
 
