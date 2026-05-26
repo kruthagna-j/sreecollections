@@ -1484,8 +1484,6 @@ function notifyOwnerWhatsApp(name, phone, product, total, orderId) {
     `View in Admin: https://sreecollectionsknl.vercel.app/admin-login.html`;
   window.open('https://wa.me/917207186844?text=' + encodeURIComponent(msg), '_blank');
 }
-
-  loadProducts();
 function setTheme(isLight) {
   document.body.classList.toggle('light-mode', isLight);
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
@@ -1521,6 +1519,7 @@ window.addEventListener('storage', (e) => {
   }
 });
   </script>
+  <script>
   function toggleTheme() {
   const isLight = document.body.classList.toggle('light-mode');
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
@@ -1541,6 +1540,9 @@ applyTheme();
 if (e.key === 'theme') {
   applyTheme();
 }
+
+  loadProducts();
+
 </script>
   </body>
   </html>
