@@ -1,6 +1,17 @@
   <!DOCTYPE html>
   <html lang="en">
   <head>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "20b46cc0-1f20-4482-9879-f258a7234c13",
+      safari_web_id: "web.onesignal.auto.040fbea3-5bf4-4f81-a6ad-042d48246d00",
+      notifyButton: { enable: true }
+    });
+  });
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop Gifts – Sree Collections Kurnool</title>
@@ -412,6 +423,27 @@
       </div>
     `).join('');
   }
+  const ONESIGNAL_APP_ID = '20b46cc0-1f20-4482-9879-f258a7234c13';
+const ONESIGNAL_REST_KEY = 'os_v2_app_ec2gzqa7ebcifgdz6jmkoi2mco226yl6kpnud35xhkydeyl7hi2tmwyfrwxEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf'; // get this from OneSignal Settings → Keys & IDs
+
+async function sendPushToAll(title, message, url = '/') {
+  try {
+    await fetch('https://onesignal.com/api/v1/notifications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${ONESIGNAL_REST_KEY}`
+      },
+      body: JSON.stringify({
+        app_id: ONESIGNAL_APP_ID,
+        included_segments: ['Total Subscriptions'],
+        headings: { en: title },
+        contents: { en: message },
+        url: `https://sreecollectionsknl.vercel.app${url}`
+      })
+    });
+  } catch(e) { console.error('Push error:', e); }
+}
   // ENTER KEY SUPPORT
 function enableEnter(inputId, callback) {
   const el = document.getElementById(inputId);
@@ -686,6 +718,18 @@ document.getElementById('otpInput').select();
       ? `Thank you ${name}! Order confirmed. We'll contact you at ${phone}.`
       : `Thank you ${name}! Payment received. We'll contact you at ${phone} shortly.`;
     showResult(true, title, msg, shortId);
+    sendPushToAll(
+  '🛍️ New Order Received!',
+  `${name} ordered ${currentProduct.name} — ₹${total.toLocaleString('en-IN')}`,
+  '/admin-login.html'
+);
+
+sendPushToAll(
+  '🛍️ New Cart Order!',
+  `${name} placed ${successCount} order(s) — ₹${cartTotalAmt.toLocaleString('en-IN')}`,
+  '/admin-login.html'
+);
+
     notifyOwnerWhatsApp(name, phone, currentProduct.name, total, shortId);
     if (currentCartIndex < cart.length - 1) {
       currentCartIndex++;
