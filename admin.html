@@ -17,6 +17,7 @@
 <title>Admin Dashboard – Sree Collections</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{--gold:#C8A96B;--gold-light:#E8C98B;--dark:#0F0F0F;--charcoal:#1A1A1A;--card-bg:#1F1F1F;--text:#F5F0E8;--muted:#999;--border:rgba(200,169,107,0.2)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -114,8 +115,28 @@ td,th{padding:0.7rem}
 <button class="tab" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
 <button class="tab active" onclick="switchTab('products', this)">Products</button>
 <button class="tab" onclick="switchTab('orders', this)">Orders</button>
+<button class="tab" onclick="switchTab('customers', this)">👥 Customers</button>
 </div>
 
+<!-- CUSTOMERS TAB -->
+<div class="tab-content" id="tab-customers">
+  <div class="section-header"><h2 class="section-title">Customers</h2></div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Total Orders</th>
+          <th>Total Spent</th>
+          <th>Last Order</th>
+        </tr>
+      </thead>
+      <tbody id="customersBody"></tbody>
+    </table>
+  </div>
+</div>
 
 <!-- DASHBOARD TAB -->
 <div class="tab-content" id="tab-dashboard">
@@ -132,9 +153,9 @@ td,th{padding:0.7rem}
     </div>
   </div>
   <div style="background:var(--card-bg);border:1px solid var(--border);padding:1.5rem">
-    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:1rem">Recent Orders (Last 7 Days)</h3>
-    <div id="recentChart"></div>
-  </div>
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:1rem">Revenue — Last 7 Days</h3>
+  <canvas id="revenueChart" height="100"></canvas>
+</div>
 </div>
 <!-- PRODUCTS TAB -->
 <div class="tab-content active" id="tab-products">
@@ -163,14 +184,46 @@ td,th{padding:0.7rem}
 <div class="section-header">
 <h2 class="section-title">Orders</h2>
 <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+  <div style="display:flex;gap:0.5rem;align-items:center">
+  <select id="bulkStatus" style="padding:0.6rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.8rem">
+    <option value="">Bulk Action</option>
+    <option value="shipping">Mark Shipping</option>
+    <option value="shipped">Mark Shipped</option>
+    <option value="delivered">Mark Delivered</option>
+    <option value="cancelled">Mark Cancelled</option>
+  </select>
+  <button onclick="applyBulkStatus()" style="padding:0.6rem 1rem;background:var(--gold);color:var(--dark);border:none;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">Apply</button>
+</div>
   <button class="btn-primary" style="background:#1a3a2a;color:#27ae60;border:1px solid rgba(39,174,96,0.3)" onclick="exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
   <button class="btn-danger" onclick="clearAllOrders()"><i class="fas fa-trash"></i> Clear All Orders</button>
 </div>
+
+<div style="display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:center">
+  <input type="text" id="orderSearch" placeholder="Search by name, phone, product..." oninput="filterOrders()" style="flex:1;min-width:200px;padding:0.7rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.85rem">
+  <select id="orderStatusFilter" onchange="filterOrders()" style="padding:0.7rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.85rem">
+    <option value="">All Statuses</option>
+    <option value="placed">Placed</option>
+    <option value="shipping">Shipping</option>
+    <option value="shipped">Shipped</option>
+    <option value="delivered">Delivered</option>
+    <option value="cancelled">Cancelled</option>
+  </select>
+  <select id="orderPaymentFilter" onchange="filterOrders()" style="padding:0.7rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.85rem">
+    <option value="">All Payments</option>
+    <option value="cod">COD</option>
+    <option value="online">Online</option>
+  </select>
+  <input type="date" id="orderDateFrom" onchange="filterOrders()" style="padding:0.7rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.85rem">
+  <input type="date" id="orderDateTo" onchange="filterOrders()" style="padding:0.7rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.85rem">
+  <button onclick="resetOrderFilters()" style="padding:0.7rem 1.2rem;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Manrope',sans-serif;font-size:0.85rem">Reset</button>
+</div>
+
 </div>
 <div class="table-container">
 <table id="ordersTable">
 <thead>
 <tr>
+  <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)" style="cursor:pointer"></th>
 <th>Order ID</th>
 <th>Customer</th>
 <th>Product</th>
@@ -317,6 +370,7 @@ function switchTab(tab, el) {
   if (tab === 'dashboard') loadDashboard();
   if (tab === 'products') loadProducts();
   if (tab === 'orders') loadOrders();
+  if (tab === 'customers') loadCustomers();
 }
 
 async function loadStats() {
@@ -380,15 +434,20 @@ async function loadProducts() {
 
 async function loadOrders() {
   const orders = await sbFetch('GET', 'orders', null, 'order=created_at.desc');
+  if (!orders) return;
+  allOrders = orders;
+  renderOrders(orders);
+}
+
+function renderOrders(orders) {
   const tbody = document.getElementById('ordersBody');
-  
   if (!orders || orders.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><i class="fas fa-receipt"></i><p>No orders yet.</p></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><i class="fas fa-receipt"></i><p>No orders found.</p></div></td></tr>';
     return;
   }
-  
   tbody.innerHTML = orders.map(o => `
     <tr>
+      <td><input type="checkbox" class="order-checkbox" value="${o.id}" style="cursor:pointer"></td>
       <td><strong>#${o.id.toString().substring(0,8)}</strong></td>
       <td>${o.customer_name}<br><small style="color:var(--muted)">${o.customer_phone}</small></td>
       <td>${o.product_name}</td>
@@ -413,7 +472,7 @@ async function loadOrders() {
   <div>${new Date(o.created_at).toLocaleDateString('en-IN')}</div>
   ${o.delivered_at ? `<div style="font-size:0.75rem;color:#27ae60;margin-top:0.3rem">✅ Delivered: ${new Date(o.delivered_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})} ${new Date(o.delivered_at).toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'})}</div>` : ''}
 </td>      <td>
-        <button class="btn-small btn-delete" onclick="deleteOrder('${o.id}')"><i class="fas fa-trash"></i></button>
+        <button class="btn-small" onclick="downloadAdminInvoice('${o.id}')" title="Download Invoice"><i class="fas fa-download"></i></button>
       </td>
     </tr>
   `).join('');
@@ -638,24 +697,48 @@ async function loadDashboard() {
 
   // Last 7 days
   const days = [];
+  const revenues = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    days.push(d);
+    days.push(d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }));
+    const dayRevenue = orders
+      .filter(o => new Date(o.created_at).toDateString() === d.toDateString())
+      .reduce((s, o) => s + (Number(o.product_price) * Number(o.quantity)), 0);
+    revenues.push(dayRevenue);
   }
-  const dayCounts = days.map(d => orders.filter(o => new Date(o.created_at).toDateString() === d.toDateString()).length);
-  const maxDay = Math.max(...dayCounts, 1);
-  document.getElementById('recentChart').innerHTML = `
-    <div style="display:flex;align-items:flex-end;gap:0.5rem;height:100px">
-      ${days.map((d, i) => `
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem">
-          <span style="font-size:0.7rem;color:var(--gold)">${dayCounts[i] || ''}</span>
-          <div style="width:100%;background:${dayCounts[i] ? 'var(--gold)' : 'var(--border)'};height:${Math.max(dayCounts[i]/maxDay*80, 4)}px;border-radius:2px 2px 0 0;transition:height 0.5s"></div>
-          <span style="font-size:0.65rem;color:var(--muted)">${d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</span>
-        </div>
-      `).join('')}
-    </div>
-  `;
+  const ctx = document.getElementById('revenueChart');
+  if (ctx) {
+    if (window.revenueChartInstance) window.revenueChartInstance.destroy();
+    window.revenueChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: days,
+        datasets: [{
+          label: 'Revenue (₹)',
+          data: revenues,
+          backgroundColor: 'rgba(200,169,107,0.6)',
+          borderColor: '#C8A96B',
+          borderWidth: 1,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => '₹' + Number(ctx.raw).toLocaleString('en-IN') } }
+        },
+        scales: {
+          y: {
+            ticks: { color: '#999', callback: v => '₹' + Number(v).toLocaleString('en-IN') },
+            grid: { color: 'rgba(200,169,107,0.1)' }
+          },
+          x: { ticks: { color: '#999' }, grid: { display: false } }
+        }
+      }
+    });
+  }
 }
 
 async function exportCSV() {
@@ -698,6 +781,127 @@ function startOrderPolling() {
   if (Notification.permission === 'default') Notification.requestPermission();
   setInterval(checkNewOrders, 30000); // check every 30 seconds
   checkNewOrders();
+}
+
+let allOrders = [];
+
+function filterOrders() {
+  const search = document.getElementById('orderSearch').value.toLowerCase();
+  const status = document.getElementById('orderStatusFilter').value;
+  const payment = document.getElementById('orderPaymentFilter').value;
+  const dateFrom = document.getElementById('orderDateFrom').value;
+  const dateTo = document.getElementById('orderDateTo').value;
+  let filtered = allOrders.filter(o => {
+    const matchSearch = !search ||
+      o.customer_name?.toLowerCase().includes(search) ||
+      o.customer_phone?.toLowerCase().includes(search) ||
+      o.product_name?.toLowerCase().includes(search) ||
+      o.id.toString().includes(search);
+    const matchStatus = !status || o.status === status;
+    const matchPayment = !payment || o.payment_method === payment;
+    const orderDate = new Date(o.created_at);
+    const matchFrom = !dateFrom || orderDate >= new Date(dateFrom);
+    const matchTo = !dateTo || orderDate <= new Date(dateTo + 'T23:59:59');
+    return matchSearch && matchStatus && matchPayment && matchFrom && matchTo;
+  });
+  renderOrders(filtered);
+}
+
+function resetOrderFilters() {
+  document.getElementById('orderSearch').value = '';
+  document.getElementById('orderStatusFilter').value = '';
+  document.getElementById('orderPaymentFilter').value = '';
+  document.getElementById('orderDateFrom').value = '';
+  document.getElementById('orderDateTo').value = '';
+  renderOrders(allOrders);
+}
+
+function toggleSelectAll(el) {
+  document.querySelectorAll('.order-checkbox').forEach(cb => cb.checked = el.checked);
+}
+
+async function applyBulkStatus() {
+  const status = document.getElementById('bulkStatus').value;
+  if (!status) { alert('Please select a bulk action first.'); return; }
+  const selected = [...document.querySelectorAll('.order-checkbox:checked')].map(cb => cb.value);
+  if (selected.length === 0) { alert('Please select at least one order.'); return; }
+  if (!confirm(`Update ${selected.length} order(s) to "${status}"?`)) return;
+  for (const id of selected) {
+    const updateData = { status };
+    if (status === 'cancelled') updateData.cancelled_by = 'admin';
+    if (status === 'delivered') updateData.delivered_at = new Date().toISOString();
+    await sbFetch('PATCH', 'orders', updateData, `id=eq.${id}`);
+  }
+  alert(`✓ ${selected.length} order(s) updated to ${status}.`);
+  document.getElementById('selectAll').checked = false;
+  loadOrders();
+  loadStats();
+}
+
+async function loadCustomers() {
+  const orders = await sbFetch('GET', 'orders', null, 'order=created_at.desc');
+  if (!orders) return;
+  const map = {};
+  orders.forEach(o => {
+    const key = o.customer_phone;
+    if (!map[key]) {
+      map[key] = { name: o.customer_name, phone: o.customer_phone, email: o.customer_email || '—', orders: 0, spent: 0, lastOrder: o.created_at };
+    }
+    map[key].orders++;
+    map[key].spent += Number(o.product_price) * Number(o.quantity);
+    if (new Date(o.created_at) > new Date(map[key].lastOrder)) map[key].lastOrder = o.created_at;
+  });
+  const customers = Object.values(map).sort((a, b) => b.spent - a.spent);
+  document.getElementById('customersBody').innerHTML = customers.map(c => `
+    <tr>
+      <td><strong>${c.name}</strong></td>
+      <td>${c.phone}</td>
+      <td>${c.email}</td>
+      <td>${c.orders}</td>
+      <td style="color:var(--gold);font-weight:700">₹${c.spent.toLocaleString('en-IN')}</td>
+      <td>${new Date(c.lastOrder).toLocaleDateString('en-IN')}</td>
+    </tr>
+  `).join('');
+}
+
+function downloadAdminInvoice(id) {
+  const o = allOrders.find(x => x.id === id);
+  if (!o) return;
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice</title>
+  <style>body{font-family:Arial,sans-serif;padding:40px;max-width:700px;margin:0 auto;color:#222}
+  h1{color:#C8A96B;font-size:24px;margin-bottom:4px}.sub{color:#888;font-size:13px;margin-bottom:30px}
+  table{width:100%;border-collapse:collapse;margin:20px 0}
+  th{background:#1A1A1A;color:#C8A96B;padding:10px;text-align:left;font-size:12px;letter-spacing:1px}
+  td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
+  .total{font-size:18px;font-weight:bold;color:#C8A96B;text-align:right;margin-top:10px}
+  @media print{button{display:none}}</style></head><body>
+  <h1>SREE COLLECTIONS</h1>
+  <div class="sub">Kurnool, Andhra Pradesh · +91 72071 86844</div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:20px">
+    <div><strong>Order ID:</strong> #${o.id.toString().slice(-8).toUpperCase()}<br>
+    <strong>Date:</strong> ${new Date(o.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div>
+    <div style="font-weight:bold;color:${o.status==='delivered'?'#2e7d32':'#e65100'}">${o.status.toUpperCase()}</div>
+  </div>
+  <table><thead><tr><th>Customer</th><th>Phone</th><th>Address</th><th>Payment</th></tr></thead>
+  <tbody><tr>
+    <td>${o.customer_name}</td><td>${o.customer_phone}</td>
+    <td>${o.customer_address || '—'}</td>
+    <td>${o.payment_method === 'cod' ? 'Cash on Delivery' : 'Online Payment'}</td>
+  </tr></tbody></table>
+  <table><thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th></tr></thead>
+  <tbody><tr>
+    <td>${o.product_name}</td>
+    <td>₹${Number(o.product_price).toLocaleString('en-IN')}</td>
+    <td>${o.quantity}</td>
+    <td>₹${(Number(o.product_price)*Number(o.quantity)).toLocaleString('en-IN')}</td>
+  </tr></tbody></table>
+  <div class="total">Grand Total: ₹${(Number(o.product_price)*Number(o.quantity)).toLocaleString('en-IN')}</div>
+  <div style="text-align:center;margin-top:40px">
+    <button onclick="window.print()" style="background:#C8A96B;color:#1A1A1A;border:none;padding:10px 30px;font-size:14px;font-weight:bold;cursor:pointer">Print / Save PDF</button>
+  </div></body></html>`;
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
 }
 
 loadStats();

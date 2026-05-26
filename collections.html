@@ -40,9 +40,13 @@
   .filter-btn{padding:0.5rem 1.2rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.8rem;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;transition:all 0.3s;font-family:'Manrope',sans-serif}
   .filter-btn.active,.filter-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,107,0.08)}
   .products-section{padding:3rem 2rem;max-width:1200px;margin:0 auto}
-  .loading{text-align:center;padding:4rem;color:var(--muted)}
-  .loading i{font-size:2rem;color:var(--gold);animation:spin 1s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+  .skeleton-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.skeleton-card{background:var(--card-bg);border:1px solid var(--border);overflow:hidden}
+.skeleton-img{width:100%;height:200px;background:linear-gradient(90deg,#1f1f1f 25%,#2a2a2a 50%,#1f1f1f 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.skeleton-line{height:12px;background:linear-gradient(90deg,#1f1f1f 25%,#2a2a2a 50%,#1f1f1f 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;margin:0.8rem 1.5rem;border-radius:2px}
+.skeleton-line.short{width:50%}
+.skeleton-line.price{width:35%;height:18px;margin-top:1rem}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
   .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
   .product-card{background:var(--card-bg);border:1px solid var(--border);transition:all 0.3s;overflow:hidden}
   .product-card:hover{border-color:var(--gold);transform:translateY(-3px)}
@@ -176,6 +180,13 @@
   </div>
 </div>
 
+<div style="padding:0.8rem 2rem;background:var(--charcoal);border-bottom:1px solid var(--border);display:flex;gap:0.8rem;align-items:center;justify-content:flex-end;flex-wrap:wrap">
+  <span style="font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em">Sort:</span>
+  <button class="filter-btn" id="sort-default" onclick="sortProducts('default',this)">Default</button>
+  <button class="filter-btn" id="sort-low" onclick="sortProducts('lowtohigh',this)">Price: Low to High</button>
+  <button class="filter-btn" id="sort-high" onclick="sortProducts('hightolow',this)">Price: High to Low</button>
+  <button class="filter-btn" id="sort-new" onclick="sortProducts('newest',this)">Newest First</button>
+</div>
   <div class="filter-bar">
     <button class="filter-btn active" onclick="filterProducts('All',this)">All</button>
     <button class="filter-btn" onclick="filterProducts('Birthday',this)">🎂 Birthday</button>
@@ -188,7 +199,19 @@
   </div>
 
   <div class="products-section">
-    <div class="loading" id="loading"><i class="fas fa-spinner"></i><br><br>Loading products...</div>
+    <div id="loading">
+  <div class="skeleton-grid">
+    ${[...Array(6)].map(()=>`
+      <div class="skeleton-card">
+        <div class="skeleton-img"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line price"></div>
+      </div>
+    `).join('')}
+  </div>
+</div>
     <div class="products-grid" id="productsGrid"></div>
     <div class="no-products" id="noProducts" style="display:none">
       <i class="fas fa-box-open" style="font-size:3rem;color:var(--gold);display:block;margin-bottom:1rem"></i>
@@ -263,6 +286,16 @@
     style="width:100%;padding:0.75rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-size:0.9rem;font-family:'Manrope',sans-serif"
   >
 </div>
+
+<div class="form-group">
+  <label>Coupon Code <span style="color:var(--muted);font-size:0.7rem">(optional)</span></label>
+  <div style="display:flex;gap:0.5rem">
+    <input type="text" id="couponInput" placeholder="Enter coupon code" style="flex:1;padding:0.75rem;background:var(--dark);border:1px solid var(--border);color:var(--text);font-size:0.9rem;font-family:'Manrope',sans-serif;text-transform:uppercase">
+    <button onclick="applyCoupon()" style="padding:0.75rem 1.2rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">Apply</button>
+  </div>
+  <div id="couponMsg" style="font-size:0.8rem;margin-top:0.4rem;min-height:16px"></div>
+</div>
+
     <div class="form-group">
       <label>Payment Method</label>
       <div class="payment-methods">
@@ -357,10 +390,24 @@
           </div>
         </div>
       </div>
-      <div class="modal-total">
-        <span>Total Amount</span>
-        <strong id="modalTotal">₹0</strong>
-      </div>
+      <div style="background:var(--dark);border:1px solid var(--border);padding:1rem;margin-bottom:0.5rem">
+  <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:0.5rem">
+    <span style="color:var(--muted)">Product Total</span>
+    <span id="modalSubtotal">₹0</span>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:0.5rem">
+    <span style="color:var(--muted)">Discount</span>
+    <span id="modalDiscount" style="color:#27ae60">—</span>
+  </div>
+   <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:0.5rem">
+    <span style="color:var(--muted)">Delivery Charge</span>
+    <span id="modalDelivery" style="color:#27ae60">₹0</span>
+  </div>
+  <div style="border-top:1px solid var(--border);padding-top:0.8rem;display:flex;justify-content:space-between">
+    <span style="color:var(--muted)">Total Amount</span>
+    <strong id="modalTotal" style="color:var(--gold);font-size:1.2rem">₹0</strong>
+  </div>
+</div>
       <div class="modal-btns">
         <button class="btn-cancel" onclick="closeModal()">Cancel</button>
         <button class="btn-confirm" id="confirmBtn" onclick="confirmOrder()">
@@ -467,14 +514,18 @@ async function sbFetch(method, table, body, filter) {
         ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" class="product-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
         <div class="product-img-placeholder" style="${p.image_url ? 'display:none' : ''}">🎁</div>
         <div class="product-body">
-          <div class="product-category">${p.category}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+  <div class="product-category">${p.category}</div>
+  ${p.stock_status === 'lowstock' ? `<span style="font-size:0.7rem;background:rgba(241,196,15,0.15);color:#f1c40f;border:1px solid rgba(241,196,15,0.3);padding:0.2rem 0.5rem">⚠️ Only a few left</span>` : ''}
+  ${p.stock_status === 'outofstock' ? `<span style="font-size:0.7rem;background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);padding:0.2rem 0.5rem">❌ Out of Stock</span>` : ''}
+</div>
           <div class="product-name">${p.name}</div>
           <div class="product-desc">${p.description || ''}</div>
           <div class="product-price">₹${Number(p.price).toLocaleString('en-IN')} <span>incl. taxes</span></div>
           <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem">
-            <button class="btn-buy" style="flex:1" onclick='openOrder(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
-              <i class="fas fa-bolt"></i> Buy Now
-            </button>
+            <button class="btn-buy" style="flex:1;${p.stock_status === 'outofstock' ? 'opacity:0.5;cursor:not-allowed' : ''}" ${p.stock_status === 'outofstock' ? 'disabled' : ''} onclick='${p.stock_status !== "outofstock" ? `openOrder(${JSON.stringify(p).replace(/'/g,"&#39;")})` : ""}'>
+  <i class="fas fa-bolt"></i> ${p.stock_status === 'outofstock' ? 'Out of Stock' : 'Buy Now'}
+</button>
             <button class="btn-buy" style="width:48px;background:var(--charcoal);border:1px solid var(--gold)" onclick='addToCart(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
               <i class="fas fa-cart-plus" style="color:var(--gold)"></i>
             </button>
@@ -534,11 +585,32 @@ function focusInput(inputId) {
   }, 100);
 }
 
-  function filterProducts(cat, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    renderProducts(cat === 'All' ? allProducts : allProducts.filter(p => p.category === cat));
-  }
+  let currentCategory = 'All';
+let currentSort = 'default';
+
+function filterProducts(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  applyFiltersAndSort();
+}
+
+function sortProducts(sort, btn) {
+  currentSort = sort;
+  document.querySelectorAll('#sort-default,#sort-low,#sort-high,#sort-new').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  applyFiltersAndSort();
+}
+
+function applyFiltersAndSort() {
+  let filtered = currentCategory === 'All' ? [...allProducts] : allProducts.filter(p => p.category === currentCategory);
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  if (search) filtered = filtered.filter(p => p.name.toLowerCase().includes(search) || p.description?.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
+  if (currentSort === 'lowtohigh') filtered.sort((a,b) => Number(a.price) - Number(b.price));
+  else if (currentSort === 'hightolow') filtered.sort((a,b) => Number(b.price) - Number(a.price));
+  else if (currentSort === 'newest') filtered.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+  renderProducts(filtered);
+}
 
   function openOrder(product) {
     currentProduct = product;
@@ -546,6 +618,9 @@ function focusInput(inputId) {
     currentPayment = 'cod';
     emailVerified = false;
     generatedOTP = '';
+    appliedCoupon = null;
+if (document.getElementById('couponInput')) document.getElementById('couponInput').value = '';
+if (document.getElementById('couponMsg')) document.getElementById('couponMsg').innerHTML = '';
     
     document.getElementById('modalProductName').textContent = product.name;
     document.getElementById('modalProductCategory').textContent = product.category;
@@ -582,9 +657,22 @@ function focusInput(inputId) {
   }
 
   function updateTotal() {
-    if (!currentProduct) return;
-    document.getElementById('modalTotal').textContent = '₹' + (Number(currentProduct.price) * currentQty).toLocaleString('en-IN');
+  if (!currentProduct) return;
+  const subtotal = Number(currentProduct.price) * currentQty;
+  const pincode = document.getElementById('custPincode')?.value.trim() || '';
+  let delivery = getDeliveryCharge(pincode);
+  let discount = 0;
+  if (appliedCoupon) {
+    if (appliedCoupon.type === 'percent') discount = Math.round(subtotal * appliedCoupon.value / 100);
+    else if (appliedCoupon.type === 'flat') discount = appliedCoupon.value;
+    else if (appliedCoupon.type === 'freeship') delivery = 0;
   }
+  const total = subtotal + delivery - discount;
+  if (document.getElementById('modalSubtotal')) document.getElementById('modalSubtotal').textContent = '₹' + subtotal.toLocaleString('en-IN');
+  if (document.getElementById('modalDelivery')) document.getElementById('modalDelivery').textContent = delivery === 0 ? '✅ Free' : '₹' + delivery;
+  if (document.getElementById('modalDiscount')) document.getElementById('modalDiscount').textContent = discount > 0 ? '-₹' + discount.toLocaleString('en-IN') : '—';
+  document.getElementById('modalTotal').textContent = '₹' + Math.max(0, total).toLocaleString('en-IN');
+}
 
   function selectPayment(method) {
     currentPayment = method;
@@ -593,6 +681,9 @@ function focusInput(inputId) {
   }
 
   // Email verification
+  document.getElementById('custPincode').addEventListener('input', function() {
+  updateTotal();
+});
   document.getElementById('custEmail').addEventListener('blur', function() {
     const email = this.value.trim();
     if (email && email.includes('@')) {
@@ -674,6 +765,27 @@ document.getElementById('otpInput').select();
       document.getElementById('otpInput').value = '';
     }
   }
+    const COUPONS = {
+  'WELCOME10': { type: 'percent', value: 10, label: '10% off' },
+  'FLAT50': { type: 'flat', value: 50, label: '₹50 off' },
+  'FREESHIP': { type: 'freeship', value: 0, label: 'Free delivery' }
+};
+let appliedCoupon = null;
+
+function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  const msg = document.getElementById('couponMsg');
+  if (!code) { msg.innerHTML = ''; appliedCoupon = null; updateTotal(); return; }
+  if (COUPONS[code]) {
+    appliedCoupon = { code, ...COUPONS[code] };
+    msg.innerHTML = `<span style="color:#27ae60">✅ Coupon applied: ${COUPONS[code].label}</span>`;
+  } else {
+    appliedCoupon = null;
+    msg.innerHTML = `<span style="color:#e74c3c">❌ Invalid coupon code</span>`;
+  }
+  updateTotal();
+}
+  
 
   async function confirmOrder() {
     const name = document.getElementById('custName').value.trim();
@@ -758,9 +870,18 @@ if (!isValidServicePincode(pincode)) {
   }
 
   async function placeOrder(name, phone, email, method, payStatus, payId) {
+    function getDeliveryCharge(pincode) {
+  const num = parseInt(pincode);
+  // Kurnool district — free delivery
+  if (num >= 518001 && num <= 518599) return 0;
+  // Rest of AP & Telangana — ₹100
+  if (num >= 500001 && num <= 534999) return 100;
+  return 0;
+}
     const address = document.getElementById('custAddress').value.trim();
-    const total = Number(currentProduct.price) * currentQty;
-    const orderData = {
+const pincode = document.getElementById('custPincode').value.trim();
+const deliveryCharge = getDeliveryCharge(pincode);
+const total = (Number(currentProduct.price) * currentQty) + deliveryCharge;    const orderData = {
       customer_name: name,
       customer_phone: phone,
       customer_email: email,
@@ -994,19 +1115,16 @@ enableEnter('custAddress', () => {
   confirmOrder();
 });
 function searchProducts() {
-  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = allProducts.filter(p => 
-    p.name.toLowerCase().includes(searchTerm) || 
-    p.description?.toLowerCase().includes(searchTerm) ||
-    p.category.toLowerCase().includes(searchTerm)
-  );
-  renderProducts(filtered);
+  applyFiltersAndSort();
+  if (document.getElementById('searchInput').value) {
+    document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+  }
+}
   
   // Update "All" filter to active when searching
   if (searchTerm) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   }
-}
 let cart = [];
 let currentCartIndex = 0;
 
