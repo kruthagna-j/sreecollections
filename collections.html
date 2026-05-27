@@ -28,6 +28,8 @@
   --text: #111;
   --muted: #555;
   --border: rgba(0,0,0,0.15);
+  --gold: #9A6F2E;
+  --gold-light: #B8882A;
 }
 
 
@@ -179,7 +181,7 @@
       <a href="my-orders.html" class="nav-back"><i class="fas fa-box"></i> My Orders</a>
       <button onclick="toggleCart()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;position:relative;padding:0.3rem">
   <i class="fas fa-shopping-cart"></i>
-  <span id="cartCount" style="position:absolute;top:-6px;right:-6px;background:var(--gold);color:var(--dark);border-radius:50%;width:18px;height:18px;font-size:0.65rem;font-weight:700;align-items:center;justify-content:center">0</span>
+  <span id="cartCount" style="position:absolute;top:-6px;right:-6px;background:var(--gold);color:var(--dark);border-radius:50%;width:18px;height:18px;font-size:0.65rem;font-weight:700;display:none;align-items:center;justify-content:center">0</span>
 </button>
       <a href="admin-login.html" class="nav-back" style="font-size:0.78rem;color:rgba(200,169,107,0.5)"><i class="fas fa-lock"></i> Admin</a>
     </div>
@@ -715,7 +717,8 @@ if (document.getElementById('couponMsg')) document.getElementById('couponMsg').i
   function updateTotal() {
   if (!currentProduct) return;
   const subtotal = Number(currentProduct.price) * currentQty;
-  const pincode = document.getElementById('custPincode')?.value.trim() || '';
+  const pincodeEl = document.getElementById('custPincode');
+  const pincode = pincodeEl ? pincodeEl.value.trim() : '';
   let delivery = getDeliveryCharge(pincode);
   let discount = 0;
   if (appliedCoupon) {
@@ -1047,107 +1050,7 @@ const total = (Number(currentProduct.price) * currentQty) + deliveryCharge;    c
     a.click();
     URL.revokeObjectURL(url);
   }
-  async function loadMyOrders() {
-  const phone = document.getElementById('myOrdersPhone').value.trim();
-
-  if (!phone) {
-    alert('Enter your phone number');
-    return;
-  }
-
-  const el = document.getElementById('myOrdersList');
-  el.innerHTML = '<p style="color:var(--muted)">Loading...</p>';
-
-  // Normalize number
-  const clean = phone
-    .replace(/\s/g, '')
-    .replace(/^(\+91|91|0)/, '');
-
-  // Validate Indian mobile
-  if (!/^[6-9]\d{9}$/.test(clean)) {
-    alert('Please enter a valid 10-digit Indian mobile number.');
-    return;
-  }
-
-  // Search both formats:
-  // 9876543210
-  // +919876543210
-  const orders1 = await sbFetch(
-    'GET',
-    'orders',
-    null,
-    `customer_phone=eq.${encodeURIComponent(clean)}&order=created_at.desc`
-  );
-
-  const orders2 = await sbFetch(
-    'GET',
-    'orders',
-    null,
-    `customer_phone=eq.${encodeURIComponent('+91' + clean)}&order=created_at.desc`
-  );
-
-  // Merge results and remove duplicates
-  const merged = [...(orders1 || []), ...(orders2 || [])];
-
-  const uniqueOrders = merged.filter(
-    (order, index, self) =>
-      index === self.findIndex(o => o.id === order.id)
-  );
-
-  if (uniqueOrders.length === 0) {
-    el.innerHTML = '<p style="color:var(--muted)">No orders found for this number.</p>';
-    return;
-  }
-
-  el.innerHTML = uniqueOrders.map(o => `
-    <div style="background:var(--card-bg);border:1px solid var(--border);padding:1.2rem;margin-bottom:1rem">
-      <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
-        <span style="color:var(--gold);font-weight:700">${o.product_name}</span>
-        <span style="color:var(--muted);font-size:0.8rem">
-          ${new Date(o.created_at).toLocaleDateString('en-IN')}
-        </span>
-      </div>
-
-      <div style="font-size:0.85rem;color:var(--muted)">
-        Qty: ${o.quantity} ·
-        ₹${Number(o.product_price * o.quantity).toLocaleString('en-IN')} ·
-        ${o.payment_method === 'cod' ? 'Cash on Delivery' : 'Online Payment'}
-      </div>
-
-      <div style="margin-top:0.5rem;font-size:0.8rem;display:flex;justify-content:space-between;align-items:center">
-        <span>
-          Status:
-          <span style="color:${o.status === 'cancelled' ? '#e74c3c' : 'var(--gold)'}">
-            ${
-              o.status === 'cancelled'
-                ? (o.cancelled_by === 'customer'
-                    ? 'Cancelled by you'
-                    : 'Cancelled by Admin')
-                : o.status
-            }
-          </span>
-        </span>
-
-        ${
-          o.status === 'placed'
-            ? `<button onclick="cancelOrder('${o.id}', '${phone}')"
-                style="padding:0.4rem 0.8rem;background:transparent;border:1px solid #e74c3c;color:#e74c3c;font-size:0.75rem;cursor:pointer;font-family:'Manrope',sans-serif">
-                Cancel Order
-              </button>`
-            : ''
-        }
-      </div>
-    </div>
-  `).join('');
-}
-
-  async function cancelOrder(id, phone) {
-  if (!confirm('Are you sure you want to cancel this order?')) return;
-  await sbFetch('PATCH', 'orders', { status: 'cancelled', cancelled_by: 'customer' }, `id=eq.${id}`);
-  alert('Order cancelled successfully.');
-  document.getElementById('myOrdersPhone').value = phone;
-  loadMyOrders();
-}
+  
 // ENTER KEY FLOW
 enableEnter('custName', () => {
   focusInput('custPhone');
@@ -1170,9 +1073,6 @@ enableEnter('custAddress', () => {
 });
 function searchProducts() {
   applyFiltersAndSort();
-  if (document.getElementById('searchInput').value) {
-    document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
-  }
 }
 let cart = [];
 let currentCartIndex = 0;
