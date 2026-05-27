@@ -684,7 +684,10 @@ function renderOrders(orders) {
   <div>${new Date(o.created_at).toLocaleDateString('en-IN')}</div>
   ${o.delivered_at ? `<div style="font-size:0.75rem;color:#27ae60;margin-top:0.3rem">✅ Delivered: ${new Date(o.delivered_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})} ${new Date(o.delivered_at).toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'})}</div>` : ''}
 </td>      <td>
-        <button class="btn-small" onclick="downloadAdminInvoice('${o.id}')" title="Download Invoice"><i class="fas fa-download"></i></button>
+        <div class="action-btns">
+          <button class="btn-small" onclick="downloadAdminInvoice('${o.id}')" title="Download Invoice"><i class="fas fa-download"></i></button>
+          <button class="btn-small btn-delete" onclick="deleteOrder('${o.id}')" title="Delete Order"><i class="fas fa-trash"></i></button>
+        </div>
       </td>
     </tr>
   `).join('');
@@ -1131,58 +1134,6 @@ startOrderPolling();
 </script>
 
 <script>
-
-async function loadCoupons() {
-  const coupons = await sbFetch('GET', 'coupons', null, 'order=created_at.desc');
-  const tbody = document.getElementById('couponsBody');
-  if (!coupons || coupons.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-ticket-alt"></i><p>No coupons yet.</p></div></td></tr>';
-    return;
-  }
-  tbody.innerHTML = coupons.map(c => `
-    <tr>
-      <td><strong>${c.code}</strong></td>
-      <td>${c.type}</td>
-      <td>${c.type === 'percent' ? c.value + '%' : c.type === 'flat' ? '₹' + c.value : 'Free'}</td>
-      <td>${c.label}</td>
-      <td><span class="badge ${c.active ? 'badge-success' : 'badge-cod'}">${c.active ? '✅ Active' : '❌ Inactive'}</span></td>
-      <td>
-        <div class="action-btns">
-          <button class="btn-small btn-delete" onclick="deleteCoupon('${c.id}')"><i class="fas fa-trash"></i></button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
-}
-
-function openCouponModal() {
-  document.getElementById('couponForm').reset();
-  document.getElementById('couponModal').classList.add('active');
-}
-
-function closeCouponModal() {
-  document.getElementById('couponModal').classList.remove('active');
-}
-
-document.getElementById('couponForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const data = {
-    code: document.getElementById('cpnCode').value.trim().toUpperCase(),
-    type: document.getElementById('cpnType').value,
-    value: Number(document.getElementById('cpnValue').value) || 0,
-    label: document.getElementById('cpnLabel').value.trim(),
-    active: document.getElementById('cpnActive').value === 'true'
-  };
-  await sbFetch('POST', 'coupons', data);
-  closeCouponModal();
-  loadCoupons();
-});
-
-async function deleteCoupon(id) {
-  if (!confirm('Delete this coupon?')) return;
-  await sbFetch('DELETE', 'coupons', null, `id=eq.${id}`);
-  loadCoupons();
-}
 
 function setTheme(isLight) {
   document.body.classList.toggle('light-mode', isLight);
