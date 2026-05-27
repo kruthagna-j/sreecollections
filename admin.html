@@ -753,11 +753,20 @@ async function deleteProduct(id) {
 }
 
 async function deleteOrder(id) {
-  if (!confirm('Delete this order?')) return;
+  if (!confirm('Are you sure you want to delete this order? This cannot be undone.')) return;
   await sbFetch('DELETE', 'orders', null, `id=eq.${id}`);
+  showToast('Order deleted successfully');
   loadOrders();
   loadStats();
 }
+
+function showToast(message) {
+  const t = document.createElement('div');
+  t.textContent = message;
+  t.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#1F1F1F;border:1px solid rgba(200,169,107,0.3);border-left:3px solid #C8A96B;padding:1rem 1.5rem;color:#F5F0E8;font-family:Manrope,sans-serif;font-size:0.85rem;z-index:999';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+} 
 
 async function clearAllOrders() {
   if (!confirm('⚠️ DELETE ALL ORDERS? This cannot be undone!')) return;
