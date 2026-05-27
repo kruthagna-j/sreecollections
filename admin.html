@@ -209,6 +209,21 @@ body {
   </div>
 </div>
 
+<div class="tab-content" id="tab-returns">
+  <div class="section-header"><h2 class="section-title">Return Requests</h2></div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th><th>Customer</th><th>Phone</th>
+          <th>Reason</th><th>Description</th><th>Status</th><th>Date</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="returnsBody"></tbody>
+    </table>
+  </div>
+</div>
+
 <!-- COUPON MODAL -->
 <div class="modal" id="couponModal">
   <div class="modal-content">
@@ -541,6 +556,7 @@ async function loadCoupons() {
       <td>
         <div class="action-btns">
           <button class="btn-small btn-delete" onclick="deleteCoupon('${c.id}')"><i class="fas fa-trash"></i></button>
+          <button class="tab" onclick="switchTab('returns', this)">↩️ Returns</button>
         </div>
       </td>
     </tr>
@@ -586,6 +602,7 @@ function switchTab(tab, el) {
   if (tab === 'orders') loadOrders();
   if (tab === 'customers') loadCustomers();
 if (tab === 'coupons') loadCoupons();
+if (tab === 'returns') loadReturns();
 }
 
 async function loadStats() {
@@ -1280,6 +1297,41 @@ window.addEventListener('storage', (e) => {
 
   window.addEventListener('DOMContentLoaded', init);
 })();
+
+async function loadReturns() {
+  const returns = await sbFetch('GET', 'returns', null, 'order=created_at.desc');
+  const tbody = document.getElementById('returnsBody');
+  if (!returns || returns.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><i class="fas fa-undo"></i><p>No return requests yet.</p></div></td></tr>';
+    return;
+  }
+  const reasonLabels = {damaged:'Arrived Damaged',wrong_item:'Wrong Item',not_as_described:'Not as Described',quality:'Quality Issue',changed_mind:'Changed Mind',other:'Other'};
+  tbody.innerHTML = returns.map(r => `
+    <tr>
+      <td><strong>#${r.order_id?.toString().substring(0,8).toUpperCase()}</strong></td>
+      <td>${r.customer_name}</td>
+      <td>${r.customer_phone}</td>
+      <td>${reasonLabels[r.reason] || r.reason}</td>
+      <td>${r.description || '—'}</td>
+      <td>
+        <select onchange="updateReturnStatus('${r.id}', this.value)" style="background:var(--dark);border:1px solid var(--border);color:var(--text);padding:0.3rem;font-family:'Manrope',sans-serif;font-size:0.8rem">
+          <option value="pending" ${r.status==='pending'?'selected':''}>Pending</option>
+          <option value="approved" ${r.status==='approved'?'selected':''}>Approved</option>
+          <option value="rejected" ${r.status==='rejected'?'selected':''}>Rejected</option>
+          <option value="completed" ${r.status==='completed'?'selected':''}>Completed</option>
+        </select>
+      </td>
+      <td>${new Date(r.created_at).toLocaleDateString('en-IN')}</td>
+      <td><a href="https://wa.me/${r.customer_phone.replace('+','')}" target="_blank" class="btn-small"><i class="fab fa-whatsapp"></i> Contact</a></td>
+    </tr>
+  `).join('');
+}
+
+async function updateReturnStatus(id, status) {
+  await sbFetch('PATCH', 'returns', {status}, `id=eq.${id}`);
+  showToast('Return status updated');
+}
+
 </script>
 </body>
 </html>
