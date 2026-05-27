@@ -513,7 +513,8 @@ async function sbFetch(method, table, body, filter) {
       },
       body: body ? JSON.stringify(body) : undefined
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok && res.status !== 204) throw new Error(`HTTP ${res.status}`);
+    if (res.status === 204) return [];
     const text = await res.text();
     return text ? JSON.parse(text) : [];
   } catch(e) {
