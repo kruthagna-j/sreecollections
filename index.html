@@ -239,19 +239,6 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J8KF1GD5ZB"></script>
 <script>
-    // ENTER KEY SUPPORT
-function enableEnter(inputId, callback) {
-  const el = document.getElementById(inputId);
-
-  if (!el) return;
-
-  el.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      callback();
-    }
-  });
-}
-
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
@@ -289,6 +276,21 @@ function enableEnter(inputId, callback) {
           <span class="auth-prefix">+91</span>
           <input type="tel" id="globalAuthPhone" placeholder="Enter 10-digit number" maxlength="10" class="auth-input">
         </div>
+        <script>  
+        // ENTER KEY SUPPORT
+function enableEnter(inputId, callback) {
+  const el = document.getElementById(inputId);
+
+  if (!el) return;
+
+  el.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      callback();
+    }
+  });
+}
+</script>
+
       </div>
       <button class="auth-submit-btn" onclick="handleSendLoginOTP()">Continue</button>
     </div>
