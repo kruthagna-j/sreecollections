@@ -377,10 +377,10 @@ document.getElementById('pinInput')?.addEventListener('keydown', e => { if(e.key
     <h2 style="font-family:'Cormorant Garamond',serif;color:var(--gold);margin-bottom:1rem">My Orders</h2>
     <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1rem">Enter the phone number you used when placing your order.</p>
     <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
-      <input type="tel" id="myOrdersPhone" placeholder="+91 XXXXX XXXXX" style="flex:1;padding:0.75rem;background:var(--charcoal);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.9rem">
-      <button onclick="loadMyOrders()" style="padding:0.75rem 1.2rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">Find Orders</button>
+      <input type="tel" id="phoneInput" placeholder="+91 XXXXX XXXXX" maxlength="15" style="flex:1;padding:0.75rem;background:var(--charcoal);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.9rem">
+      <button onclick="loadOrders()" style="padding:0.75rem 1.2rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">Find Orders</button>
     </div>
-    <div id="myOrdersList"></div>
+    <div id="ordersList"></div>
   </div>
 </section>
 
@@ -401,10 +401,10 @@ async function sbFetch(method, table, body, filter) {
   return text ? JSON.parse(text) : [];
 }
 
-async function loadMyOrders() {
-  const phone = document.getElementById('myOrdersPhone').value.trim();
+async function loadOrders() {
+  const phone = document.getElementById('phoneInput').value.trim();
   if (!phone) { alert('Enter your phone number'); return; }
-  const el = document.getElementById('myOrdersList');
+  const el = document.getElementById('ordersList');
   el.innerHTML = '<p style="color:var(--muted)">Loading...</p>';
   const clean = phone.trim().replace(/\s/g, '').replace(/^(\+91|91|0)/, '');
   if (!/^[6-9]\d{9}$/.test(clean)) {
@@ -435,8 +435,8 @@ async function cancelOrder(id, phone) {
   if (!confirm('Are you sure you want to cancel this order?')) return;
   await sbFetch('PATCH', 'orders', { status: 'cancelled', cancelled_by: 'customer' }, `id=eq.${id}`);
   alert('Order cancelled successfully.');
-  document.getElementById('myOrdersPhone').value = phone;
-  loadMyOrders();
+  document.getElementById('phoneInput').value = phone;
+  loadOrders();
 }
 </script>
 <footer>
