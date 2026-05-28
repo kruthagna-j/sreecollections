@@ -546,7 +546,7 @@ function logout() {
 
 async function sbFetch(method, table, body, filter) {
   try {
-    const res = await fetch('/api/server', {
+    const res = await fetch('/backend/server', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
