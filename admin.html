@@ -572,7 +572,7 @@ async function loadCoupons() {
   const tbody = document.getElementById('couponsBody');
 
   if (!couponsData || couponsData.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-ticket-alt"></i><p>No coupons yet.</p></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><i class="fas fa-ticket-alt"></i><p>No coupons yet.</p></div></td></tr>';
     return;
   }
 
@@ -665,16 +665,23 @@ function filterCoupons() {
 
   const tbody = document.getElementById('couponsBody');
 
-  tbody.innerHTML = filtered.map(c => `
+  tbody.innerHTML = filtered.map(c => {
+  const expired = c.expiry_date ? new Date(c.expiry_date) < new Date() : false;
+  return `
     <tr>
       <td><strong>${c.code}</strong></td>
       <td>${c.type}</td>
       <td>${c.value}</td>
       <td>${c.label}</td>
-      <td>${c.active ? 'Active' : 'Inactive'}</td>
-      <td>—</td>
-    </tr>
-  `).join('');
+      <td>${c.expiry_date ? c.expiry_date.split('T')[0] : '—'}</td>
+      <td>${c.usage_limit || '∞'}</td>
+      <td><span class="badge ${c.active && !expired ? 'badge-success' : 'badge-cod'}">${expired ? '❌ Expired' : (c.active ? 'Active' : 'Inactive')}</span></td>
+      <td>
+        <button class="btn-small" onclick="toggleCoupon('${c.id}', ${!c.active})">${c.active ? 'Disable' : 'Enable'}</button>
+        <button class="btn-small btn-delete" onclick="deleteCoupon('${c.id}')">Delete</button>
+      </td>
+    </tr>`;
+}).join('');
 }
 
 async function inlineUpdate(id, field, value) {
