@@ -163,73 +163,6 @@ section{padding:5rem 2rem}
 .map-link{color:var(--gold);font-size:0.85rem;font-weight:600;text-decoration:none;letter-spacing:0.05em;text-transform:uppercase;border:1px solid var(--gold);padding:0.6rem 1.5rem;transition:all 0.3s}
 .map-link:hover{background:var(--gold);color:var(--dark)}
 
-/* E-COMMERCE LOGIN MODAL STYLES */
-.auth-modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.auth-modal-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-.auth-modal-card {
-  background: var(--charcoal);
-  border: 1px solid var(--border);
-  width: 100%;
-  max-width: 420px;
-  padding: 2.5rem;
-  border-radius: 4px;
-  position: relative;
-  transform: translateY(-20px);
-  transition: transform 0.3s ease;
-}
-.auth-modal-overlay.active .auth-modal-card {
-  transform: translateY(0);
-}
-.auth-close-btn {
-  position: absolute;
-  top: 1rem; right: 1rem;
-  background: none; border: none;
-  color: var(--muted); font-size: 1.2rem;
-  cursor: pointer; transition: color 0.2s;
-}
-.auth-close-btn:hover { color: var(--gold); }
-.auth-input-group { margin-bottom: 1.5rem; }
-.auth-input-label {
-  display: block; font-size: 0.8rem;
-  text-transform: uppercase; letter-spacing: 0.05em;
-  color: var(--gold); margin-bottom: 0.5rem;
-}
-.auth-field-wrapper { display: flex; }
-.auth-prefix {
-  background: var(--card-bg); border: 1px solid var(--border);
-  border-right: none; color: var(--text);
-  padding: 0.75rem 1rem; font-size: 0.95rem; font-weight: 600;
-}
-.auth-input {
-  flex: 1; padding: 0.75rem 1rem;
-  background: var(--dark); border: 1px solid var(--border);
-  color: var(--text); font-family: 'Manrope', sans-serif; font-size: 0.95rem;
-}
-.auth-input:focus { outline: none; border-color: var(--gold); }
-.auth-submit-btn {
-  width: 100%; padding: 0.85rem;
-  background: var(--gold); color: var(--dark);
-  border: none; font-weight: 700; font-family: 'Manrope', sans-serif;
-  text-transform: uppercase; letter-spacing: 0.05em;
-  cursor: pointer; transition: background 0.2s;
-}
-.auth-submit-btn:hover { background: var(--gold-light); }
-
 /* FOOTER */
 footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;margin-bottom:2rem}
@@ -239,6 +172,54 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
 .footer-col a{display:block;color:var(--muted);text-decoration:none;font-size:0.85rem;margin-bottom:0.6rem;transition:color 0.3s}
 .footer-col a:hover{color:var(--text)}
 .footer-bottom{padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;font-size:0.8rem;color:var(--muted)}
+
+/* LOGIN MODAL WALL CSS */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.auth-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.auth-modal-card {
+  background: #161616;
+  border: 1px solid rgba(200,169,107,0.25);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  position: relative;
+}
+.auth-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.auth-modal-close:hover { color: var(--gold); }
+.auth-input-group { text-align: left; margin-bottom: 1.5rem; }
+.auth-input-label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.5rem; }
+.auth-field-wrapper { display: flex; align-items: center; background: #222; border: 1px solid rgba(200,169,107,0.15); }
+.auth-prefix { padding: 0.8rem 0.5rem 0.8rem 1rem; color: var(--muted); font-size: 0.95rem; font-weight: 600; }
+.auth-input { background: none; border: none; outline: none; padding: 0.8rem 1rem 0.8rem 0.2rem; color: #fff; font-size: 0.95rem; width: 100%; font-family: inherit; }
+.auth-submit-btn { width: 100%; background: var(--gold); color: #000; border: none; padding: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+.auth-submit-btn:hover { background: var(--gold-light); }
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
@@ -260,52 +241,28 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
 </script>
 </head>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "20b46cc0-1f20-4482-9879-f258a7234c13",
       safari_web_id: "web.onesignal.auto.040fbea3-5bf4-4f81-a6ad-042d48246d00",
-      notifyButton: { enable: true }
+      notifyButton: { 
+        enable: true 
+      }
     });
   });
 </script>
 <body>
 <canvas id="bgCanvas"></canvas>
-<nav>
-  <a href="index.html" class="logo">Sree Collections</a>
-  <ul class="nav-links">
-    <li><a href="./collections.html">Collections</a></li>
-    <li><a href="javascript:void(0)" onclick="handleProtectedFeature('#myOrders')">My Orders</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#reviews">Reviews</a></li>
-    <li><a href="tel:+917207186844">Contact</a></li>
-    <li id="navAuthLink"><a href="javascript:void(0)" onclick="openAuthModal()"><i class="fas fa-user-circle"></i> Login</a></li>
-    <li><a href="javascript:void(0)" onclick="handleProtectedFeature('admin-login.html', true)" class="nav-back" style="font-size:0.78rem;color:rgba(200,169,107,0.5)"><i class="fas fa-lock"></i> Admin</a></li>
-  </ul>
-  <a href="./collections.html" class="nav-cta">Explore Shop</a>
-  <button onclick="toggleTheme()" id="themeBtn" title="Toggle theme" style="background:none;border:1px solid var(--border);color:var(--gold);width:36px;height:36px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center">🌙</button>
-  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<div class="mobile-menu" id="mobileMenu">
-  <a href="./collections.html" onclick="toggleMenu()">Collections</a>
-  <a href="javascript:void(0)" onclick="toggleMenu(); handleProtectedFeature('#myOrders')">My Orders</a>
-  <a href="#about" onclick="toggleMenu()">About</a>
-  <a href="#reviews" onclick="toggleMenu()">Reviews</a>
-  <a href="tel:+917207186844" onclick="toggleMenu()">Contact</a>
-  <div id="mobileAuthLink"><a href="javascript:void(0)" onclick="toggleMenu(); openAuthModal();">👤 Login / Sign Up</a></div>
-  <a href="./collections.html" style="color:var(--gold);font-weight:600">🛍️ Explore Shop</a>
-  <a href="javascript:void(0)" onclick="toggleMenu(); handleProtectedFeature('admin-login.html', true)" style="color:var(--muted);font-size:0.8rem">Admin Login</a>
-</div>
 
 <div class="auth-modal-overlay" id="globalAuthModal">
   <div class="auth-modal-card">
+    <button class="auth-modal-close" onclick="closeAuthModal()">✕</button>
     <div id="authHeader">
       <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--gold); margin-bottom:0.5rem">Welcome to Sree Collections</h3>
-      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:1.5rem">Please login or signup with your mobile number to browse our collections.</p>
+      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:1.5rem">Verify your mobile number to access your order history and account dashboard.</p>
     </div>
 
     <div id="authPhoneView">
@@ -332,6 +289,37 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
       </div>
     </div>
   </div>
+</div>
+
+<nav>
+  <a href="index.html" class="logo">Sree Collections</a>
+  <ul class="nav-links">
+    <li><a href="./collections.html">Collections</a></li>
+    <li><a href="javascript:void(0)" onclick="handleProtectedFeature('#myOrders')">My Orders</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="tel:+917207186844">Contact</a></li>
+    <li><a href="#contact">Visit Our Store</a></li>
+    <li><a href="javascript:void(0)" onclick="handleProtectedFeature('admin-login.html', true)" class="nav-back" style="font-size:0.78rem;color:rgba(200,169,107,0.5)"><i class="fas fa-lock"></i> Admin</a></li>
+    <li id="navAuthLink"><a href="javascript:void(0)" onclick="openAuthModal()"><i class="fas fa-user-circle"></i> Login</a></li>
+  </ul>
+  <a href="./collections.html" class="nav-cta">Shop Now</a>
+  <button onclick="toggleTheme()" id="themeBtn" title="Toggle theme" style="background:none;border:1px solid var(--border);color:var(--gold);width:36px;height:36px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center">🌙</button>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="./collections.html" onclick="toggleMenu()">Collections</a>
+  <a href="javascript:void(0)" onclick="toggleMenu(); handleProtectedFeature('#myOrders')">My Orders</a>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#reviews" onclick="toggleMenu()">Reviews</a>
+  <a href="tel:+917207186844" onclick="toggleMenu()">Contact</a>
+  <a href="#contact" onclick="toggleMenu()">Visit Our Store</a>
+  <div id="mobileAuthLink"><a href="javascript:void(0)" onclick="toggleMenu(); openAuthModal();">👤 Login / Sign Up</a></div>
+  <a href="./collections.html" style="color:var(--gold);font-weight:600">🛍️ Shop Now</a>
+  <a href="javascript:void(0)" onclick="toggleMenu(); handleProtectedFeature('admin-login.html', true)" style="color:var(--muted);font-size:0.8rem">Admin Login</a>
 </div>
 
 <section class="hero">
@@ -392,10 +380,10 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
     <div class="reviews-grid">
       <div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Ordered a birthday hamper for my wife — the packaging was absolutely stunning. She was speechless. Will definitely order again!"</div><div class="reviewer"><div class="reviewer-avatar">R</div><div><div class="reviewer-name">Ravi Kumar</div><div class="reviewer-date">Google Review</div></div></div></div>
       <div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Best gift shop in Kurnool! Got wedding return gifts for 200 guests — the quality and variety were excellent at a great price."</div><div class="reviewer"><div class="reviewer-avatar">S</div><div><div class="reviewer-name">Sunitha Reddy</div><div class="reviewer-date">Google Review</div></div></div></div>
-      <div class="review-card"><div class="stars">★★¼★☆</div><div class="review-text">"Very good collection. The staff was helpful in selecting the right corporate gifts for our clients. Good packaging, on-time delivery."</div><div class="reviewer"><div class="reviewer-avatar">M</div><div><div class="reviewer-name">Mahesh Babu</div><div class="reviewer-date">Google Review</div></div></div></div>
+      <div class="review-card"><div class="stars">★★★★☆</div><div class="review-text">"Very good collection. The staff was helpful in selecting the right corporate gifts for our clients. Good packaging, on-time delivery."</div><div class="reviewer"><div class="reviewer-avatar">M</div><div><div class="reviewer-name">Mahesh Babu</div><div class="reviewer-date">Google Review</div></div></div></div>
       <div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"The anniversary gift box I ordered was perfect — exactly what I imagined. Super quick response on WhatsApp too!"</div><div class="reviewer"><div class="reviewer-avatar">P</div><div><div class="reviewer-name">Priya Sharma</div><div class="reviewer-date">Google Review</div></div></div></div>
       <div class="review-card"><div class="stars">★★★★★</div><div class="review-text">"Loved the Diwali hampers! Bought for my entire office. Everyone was happy. Quality is unmatched compared to other stores."</div><div class="reviewer"><div class="reviewer-avatar">A</div><div><div class="reviewer-name">Anil Prasad</div><div class="reviewer-date">Google Review</div></div></div></div>
-      <div class="review-card"><div class="stars">★★¼★☆</div><div class="review-text">"Great baby shower gift kit. All items were premium and beautifully arranged. Highly recommend for new parents!"</div><div class="reviewer"><div class="reviewer-avatar">L</div><div><div class="reviewer-name">Lakshmi Devi</div><div class="reviewer-date">Google Review</div></div></div></div>
+      <div class="review-card"><div class="stars">★★★★☆</div><div class="review-text">"Great baby shower gift kit. All items were premium and beautifully arranged. Highly recommend for new parents!"</div><div class="reviewer"><div class="reviewer-avatar">L</div><div><div class="reviewer-name">Lakshmi Devi</div><div class="reviewer-date">Google Review</div></div></div></div>
     </div>
   </div>
 </section>
@@ -420,7 +408,9 @@ function checkPin() {
     res.innerHTML = '<span style="color:#e74c3c">⚠️ Enter a valid 6-digit pincode.</span>'; return;
   }
   const num = parseInt(pin);
+
   const isAPTS = (num >= 500001 && num <= 534999);
+
   if (isAPTS) {
     res.innerHTML = '✅ <strong style="color:#27ae60">Great news!</strong> We deliver to your area. <a href="https://wa.me/917207186844" target="_blank" style="color:var(--gold)">Order on WhatsApp →</a>';
   } else {
@@ -464,10 +454,12 @@ document.getElementById('pinInput')?.addEventListener('keydown', e => { if(e.key
 <section id="myOrders" style="background:var(--dark);padding:5rem 2rem">
   <div style="max-width:700px;margin:0 auto">
     <h2 style="font-family:'Cormorant Garamond',serif;color:var(--gold);margin-bottom:1rem">My Orders</h2>
-    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1.5rem">Enter your phone number to check your order history.</p>
-    <div style="display:flex;gap:0.5rem;margin-bottom:2rem">
-      <input type="tel" id="phoneInput" placeholder="Enter 10-digit mobile number" style="flex:1;padding:0.75rem;background:var(--charcoal);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.9rem">
-      <button onclick="loadOrders()" style="padding:0.75rem 1.2rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">Track Orders</button>
+    <div id="guardedOrdersWrapper">
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1rem">Enter the phone number you used when placing your order.</p>
+      <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+        <input type="tel" id="phoneInput" placeholder="+91 XXXXX XXXXX" maxlength="15" style="flex:1;padding:0.75rem;background:var(--charcoal);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:0.9rem">
+        <button onclick="loadOrders()" style="padding:0.75rem 1.2rem;background:var(--gold);color:var(--dark);border:none;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif">Find Orders</button>
+      </div>
     </div>
     <div id="ordersList"></div>
   </div>
@@ -490,17 +482,32 @@ async function sbFetch(method, table, body, filter) {
 }
 
 async function loadOrders() {
+  const activeSession = localStorage.getItem('userLoggedInPhone');
+  if (!activeSession) {
+    alert('Please log in with your mobile number to view and track order details.');
+    openAuthModal();
+    return;
+  }
+
   const phone = document.getElementById('phoneInput').value.trim();
   if (!phone) { alert('Enter your phone number'); return; }
-  const clean = phone.replace(/\s/g, '').replace(/^(\+91|91|0)/, '');
-  if (!/^[6-9]\d{9}$/.test(clean)) { alert('Enter a valid 10-digit Indian mobile number.'); return; }
-  const searchPhone = '+91' + clean;
   const el = document.getElementById('ordersList');
-  el.innerHTML = '<p style="color:var(--muted)">Loading orders history...</p>';
-  
+  el.innerHTML = '<p style="color:var(--muted)">Loading...</p>';
+  const clean = phone.trim().replace(/\s/g, '').replace(/^(\+91|91|0)/, '');
+  if (!/^[6-9]\d{9}$/.test(clean)) {
+    alert('Please enter a valid 10-digit Indian mobile number.');
+    return;
+  }
+  const searchPhone = '+91' + clean;
+
+  if (activeSession.replace(/\s/g, '') !== searchPhone) {
+    alert('Security Alert: You can only view orders placed by your verified login number.');
+    el.innerHTML = '<p style="color:#e74c3c">Access Denied: Phone mismatch.</p>';
+    return;
+  }
+
   const orders = await sbFetch('GET', 'orders', null, `customer_phone=eq.${encodeURIComponent(searchPhone)}&order=created_at.desc`);
   if (!orders || orders.length === 0) { el.innerHTML = '<p style="color:var(--muted)">No orders found for this number.</p>'; return; }
-  
   el.innerHTML = orders.map(o => `
     <div style="background:var(--card-bg);border:1px solid var(--border);padding:1.2rem;margin-bottom:1rem">
       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
@@ -509,22 +516,61 @@ async function loadOrders() {
       </div>
       <div style="font-size:0.85rem;color:var(--muted)">Qty: ${o.quantity} · ₹${Number(o.product_price * o.quantity).toLocaleString('en-IN')} · ${o.payment_method === 'cod' ? 'Cash on Delivery' : 'Online Payment'}</div>
       <div style="margin-top:0.5rem;font-size:0.8rem;display:flex;justify-content:space-between;align-items:center">
-        <span>Status: <span style="color:${o.status === 'cancelled' ? '#e74c3c' : 'var(--gold)'}">
-  ${o.status === 'cancelled' ? (o.cancelled_by === 'customer' ? 'Cancelled by customer' : 'Cancelled by Admin') : o.status}
-</span></span>
-        ${o.status === 'placed' ? `<button onclick="cancelOrder('${o.id}', '${searchPhone}')" style="padding:0.4rem 0.8rem;background:transparent;border:1px solid #e74c3c;color:#e74c3c;font-size:0.75rem;cursor:pointer;font-family:'Manrope',sans-serif">Cancel Order</button>` : ''}
+        <span>Status: <span style="color:${o.status === 'cancelled' ? '#e74c3c' : 'var(--gold)'}">${o.status === 'cancelled' ? (o.cancelled_by === 'customer' ? 'Cancelled by customer' : 'Cancelled by Admin') : o.status}</span></span>
+        ${o.status === 'placed' ? `<button onclick="cancelOrder('${o.id}', '${phone}')" style="padding:0.4rem 0.8rem;background:transparent;border:1px solid #e74c3c;color:#e74c3c;font-size:0.75rem;cursor:pointer;font-family:'Manrope',sans-serif">Cancel Order</button>` : ''}
       </div>
     </div>
   `).join('');
 }
 
-async function cancelOrder(id, searchPhone) {
+async function cancelOrder(id, phone) {
+  if (!localStorage.getItem('userLoggedInPhone')) {
+    alert('Session expired. Please log in again.');
+    openAuthModal();
+    return;
+  }
   if (!confirm('Are you sure you want to cancel this order?')) return;
   await sbFetch('PATCH', 'orders', { status: 'cancelled', cancelled_by: 'customer' }, `id=eq.${id}`);
   alert('Order cancelled successfully.');
+  document.getElementById('phoneInput').value = phone;
   loadOrders();
 }
 </script>
+
+<footer>
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">Sree Collections</a>
+        <p>Kurnool's most loved gift store. Premium gifts for every occasion, every emotion, every person.</p>
+        <div style="display:flex;gap:1rem;margin-top:1rem">
+          <a href="https://wa.me/917207186844" target="_blank" style="color:var(--muted);font-size:1.2rem"><i class="fab fa-whatsapp"></i></a>
+          <a href="tel:+917207186844" style="color:var(--muted);font-size:1.2rem"><i class="fas fa-phone"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Collections</h4>
+        <a href="collections.html?category=Birthday">Birthday Gifts</a>
+        <a href="collections.html?category=Wedding">Wedding Gifts</a>
+        <a href="collections.html?category=Anniversary">Anniversary</a>
+        <a href="collections.html?category=Corporate">Corporate</a>
+        <a href="collections.html?category=Festivals">Festivals</a>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="./collections.html">All Products</a>
+        <a href="javascript:void(0)" onclick="handleProtectedFeature('#myOrders')">My Orders</a>
+        <a href="tel:+917207186844">Contact Us</a>
+        <a href="https://wa.me/917207186844" target="_blank">WhatsApp Order</a>
+        <a href="javascript:void(0)" onclick="handleProtectedFeature('admin-login.html', true)" style="color:rgba(200,169,107,0.4);font-size:0.78rem"><i class="fas fa-lock"></i> Admin</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sree Collections, Kurnool. All rights reserved.</span>
+      <span>Made with ❤️ in Kurnool</span>
+    </div>
+  </div>
+</footer>
 
 <script>
 let authCountdown;
@@ -540,7 +586,6 @@ function closeAuthModal() {
   clearInterval(authCountdown);
 }
 
-// THE GATEKEEPER: Checks login status before letting users go to orders or admin panels
 function handleProtectedFeature(target, isExternalPage = false) {
   const isLoggedIn = localStorage.getItem('userLoggedInPhone');
   
@@ -552,8 +597,10 @@ function handleProtectedFeature(target, isExternalPage = false) {
       window.open(target, '_blank');
     } else {
       window.location.hash = target;
-      // If jumping to myOrders segment, trigger tracking data render automatically
       if (target === '#myOrders') {
+        if (document.getElementById('phoneInput')) {
+          document.getElementById('phoneInput').value = isLoggedIn;
+        }
         loadOrders();
       }
     }
@@ -637,7 +684,7 @@ async function handleVerifyLoginOTP() {
     if (otp === "123456" || otp.length === 6) {
       executeLoginSuccess(formattedPhone);
     } else {
-      alert('Invalid OTP. Try entering 123456 for testing.');
+      alert('Invalid OTP. Try entering 123456 for manual testing.');
     }
   }
 }
@@ -647,12 +694,19 @@ function executeLoginSuccess(phone) {
   alert('Logged in successfully!');
   closeAuthModal();
   checkGlobalLoginState();
+  if (window.location.hash === '#myOrders') {
+    if (document.getElementById('phoneInput')) {
+      document.getElementById('phoneInput').value = phone;
+    }
+    loadOrders();
+  }
 }
 
 function handleLogout() {
   localStorage.removeItem('userLoggedInPhone');
   alert('Logged out successfully.');
   checkGlobalLoginState();
+  document.getElementById('ordersList').innerHTML = '';
 }
 
 function checkGlobalLoginState() {
@@ -663,9 +717,8 @@ function checkGlobalLoginState() {
   if (sessionUser) {
     if (desktopLink) desktopLink.innerHTML = `<a href="javascript:void(0)" onclick="handleLogout()" style="color:var(--gold)"><i class="fas fa-sign-out-alt"></i> Logout (${sessionUser.substring(3)})</a>`;
     if (mobileLink) mobileLink.innerHTML = `<a href="javascript:void(0)" onclick="handleLogout()" style="color:var(--gold)">Logout (${sessionUser.substring(3)})</a>`;
-    
     if (document.getElementById('phoneInput')) {
-      document.getElementById('phoneInput').value = sessionUser.replace('+91', '');
+      document.getElementById('phoneInput').value = sessionUser;
     }
   } else {
     if (desktopLink) desktopLink.innerHTML = `<a href="javascript:void(0)" onclick="openAuthModal()"><i class="fas fa-user-circle"></i> Login</a>`;
@@ -673,58 +726,11 @@ function checkGlobalLoginState() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  checkGlobalLoginState();
-  
-  // Catch the URL parameter passed from the collections page buy button
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('triggerLogin') === 'true' && !localStorage.getItem('userLoggedInPhone')) {
-    openAuthModal();
-  }
-});
-</script>
-
-<footer>
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="index.html" class="logo">Sree Collections</a>
-        <p>Kurnool's most loved gift store. Premium gifts for every occasion, every emotion, every person.</p>
-        <div style="display:flex;gap:1rem;margin-top:1rem">
-          <a href="https://wa.me/917207186844" target="_blank" style="color:var(--muted);font-size:1.2rem"><i class="fab fa-whatsapp"></i></a>
-          <a href="tel:+917207186844" style="color:var(--muted);font-size:1.2rem"><i class="fas fa-phone"></i></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Collections</h4>
-        <a href="collections.html?category=Birthday">Birthday Gifts</a>
-        <a href="collections.html?category=Wedding">Wedding Gifts</a>
-        <a href="collections.html?category=Anniversary">Anniversary</a>
-        <a href="collections.html?category=Corporate">Corporate</a>
-        <a href="collections.html?category=Festivals">Festivals</a>
-      </div>
-      <div class="footer-col">
-        <h4>Quick Links</h4>
-        <a href="./collections.html">All Products</a>
-        <a href="#myOrders">My Orders</a>
-        <a href="tel:+917207186844">Contact Us</a>
-        <a href="https://wa.me/917207186844" target="_blank">WhatsApp Order</a>
-        <a href="admin-login.html" target="_blank" style="color:rgba(200,169,107,0.4);font-size:0.78rem"><i class="fas fa-lock"></i> Admin</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 Sree Collections, Kurnool. All rights reserved.</span>
-      <span>Made with ❤️ in Kurnool</span>
-    </div>
-  </div>
-</footer>
-
-<script>
 function toggleMenu(){
   const m = document.getElementById('mobileMenu');
   m.style.display = m.style.display === 'block' ? 'none' : 'block';
 }
-// Scroll reveal
+
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
 }, {threshold:0.1});
@@ -734,16 +740,23 @@ document.querySelectorAll('.collection-card,.why-card,.review-card').forEach(el 
   el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
   observer.observe(el);
 });
+
 document.addEventListener('DOMContentLoaded', () => {
   const style = document.createElement('style');
   style.textContent = '.visible{opacity:1 !important;transform:translateY(0) !important}';
   document.head.appendChild(style);
+  
+  checkGlobalLoginState();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('triggerLogin') === 'true' && !localStorage.getItem('userLoggedInPhone')) {
+    openAuthModal();
+  }
 });
 
 function setTheme(isLight) {
   document.body.classList.toggle('light-mode', isLight);
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
-
   const btn = document.getElementById('themeBtn');
   if (btn) btn.textContent = isLight ? '☀️' : '🌙';
 }
@@ -759,7 +772,6 @@ function applyTheme() {
   const isLight = saved ? saved === 'light' : systemPrefersLight;
   setTheme(isLight);
 }
-
 applyTheme();
 
 window.addEventListener('storage', (e) => {
@@ -773,7 +785,6 @@ window.addEventListener('storage', (e) => {
 (function() {
   const canvas = document.getElementById('bgCanvas');
   const ctx = canvas.getContext('2d');
-
   let particles = [];
   let animationId;
 
@@ -781,10 +792,7 @@ window.addEventListener('storage', (e) => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
-
-  function isLight() {
-    return document.body.classList.contains('light-mode');
-  }
+  function isLight() { return document.body.classList.contains('light-mode'); }
 
   function createParticles() {
     particles = [];
@@ -804,7 +812,6 @@ window.addEventListener('storage', (e) => {
 
   function drawParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     const light = isLight();
     const color = light ? '154, 111, 46' : '200, 169, 107';
 
@@ -812,15 +819,12 @@ window.addEventListener('storage', (e) => {
       p.x += p.speedX;
       p.y += p.speedY;
       p.opacity += p.opacityDir;
-
       if (p.opacity <= 0.05) p.opacityDir = Math.abs(p.opacityDir);
       if (p.opacity >= 0.6) p.opacityDir = -Math.abs(p.opacityDir);
-
       if (p.x < 0) p.x = canvas.width;
       if (p.x > canvas.width) p.x = 0;
       if (p.y < 0) p.y = canvas.height;
       if (p.y > canvas.height) p.y = 0;
-
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(${color}, ${p.opacity})`;
@@ -842,7 +846,6 @@ window.addEventListener('storage', (e) => {
         }
       });
     });
-
     animationId = requestAnimationFrame(drawParticles);
   }
 
@@ -852,15 +855,7 @@ window.addEventListener('storage', (e) => {
     if (animationId) cancelAnimationFrame(animationId);
     drawParticles();
   }
-
-  window.addEventListener('resize', () => {
-    resize();
-    createParticles();
-  });
-
-  const observer = new MutationObserver(() => {});
-  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
+  window.addEventListener('resize', () => { resize(); createParticles(); });
   window.addEventListener('DOMContentLoaded', init);
 })();
 </script>
