@@ -72,6 +72,7 @@ nav{
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
   width: 100%;
   height: 70px; /* Forces a fixed, unchanging height container */
   z-index: 1000; /* Makes sure it always stays above background elements */
@@ -79,14 +80,31 @@ nav{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #0F0F0F; /* Solid background color on initial load to stop background bleeding */
+  background: rgba(15, 15, 15, 0.97); /* Solid background color on initial load to stop background bleeding */
+  backdrop-filter: blur(10px); /* Adds a blur effect to the background behind the nav */
   border-bottom: 1px solid var(--border);
   box-sizing: border-box;
+  margin-bottom: 0; /* Ensures no extra space below the nav */
 }
+
+body.light-mode nav {
+  background: rgba(248, 244, 238, 0.97);
+}
+
 
 /* Fallback adjustment to ensure the hero section starts exactly below the 70px bar */
 .hero {
   margin-top: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 70px 2rem 4rem;
+  background: radial-gradient(ellipse at 50% 0%, rgba(200,169,107,0.08) 0%, transparent 60%), var(--dark);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin-bottom: 0; /* Ensures no extra space below the hero */
 }
 .logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--gold);text-decoration:none}
 .nav-links{display:flex;gap:2rem;list-style:none}
