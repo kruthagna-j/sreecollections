@@ -2,7 +2,7 @@ const SUPABASE_URL = 'https://peqqtfvypljvgcorddbn.supabase.co';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const ADMIN_SECRET = process.env.ADMIN_SECRET;
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

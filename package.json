@@ -1,0 +1,24 @@
+{
+  "name": "sree-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.0",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "fs-extra": "^11.3.5",
+    "jsonwebtoken": "^9.0.3",
+    "razorpay": "^2.9.6"
+  },
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
