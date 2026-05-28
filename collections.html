@@ -727,11 +727,32 @@ function resetPrice() {
 }
 
   function openOrder(product) {
-    trackRecentlyViewed(product);
-    currentProduct = product;
-    currentQty = 1;
-    currentPayment = 'cod';
-    emailVerified = false;
+
+  // Check if user is authenticated with their phone number natively
+  const activeUser = localStorage.getItem('userLoggedInPhone');
+  if (!activeUser) {
+    alert("To order items, please log in with your mobile number first.");
+
+
+    // Redirect to home page and request an instant login modal trigger
+    window.location.href = "index.html?triggerLogin=true";
+    return; // Kill execution so the purchase forms don't open
+  }
+
+  // Existing operational checkout logic continues normally below
+  currentProduct = product;
+  currentQty = 1;
+  currentPayment = 'cod';
+  emailVerified = false;
+
+  
+  // Auto-populate the verified phone details into your native field if it exists
+  setTimeout(() => {
+    const custPhoneField = document.getElementById('custPhone');
+    if (custPhoneField) {
+      custPhoneField.value = activeUser.replace('+91', '');
+    }
+  }, 100);
     generatedOTP = '';
     appliedCoupon = null;
 if (document.getElementById('orderCouponInput')) document.getElementById('orderCouponInput').value = '';
@@ -742,7 +763,6 @@ if (document.getElementById('orderCouponMsg')) document.getElementById('orderCou
     document.getElementById('modalProductPrice').textContent = '₹' + Number(product.price).toLocaleString('en-IN');
     document.getElementById('qtyVal').textContent = 1;
     document.getElementById('custName').value = '';
-    document.getElementById('custPhone').value = '';
     document.getElementById('custEmail').value = '';
     document.getElementById('custAddress').value = '';
     document.getElementById('custPincode').value = '';
@@ -1233,7 +1253,20 @@ function toggleCart() {
   if (!isOpen) updateCartUI();
 }
 function checkoutCart() {
-  if (cart.length === 0) { alert('Cart is empty'); return; }
+  if (cart.length === 0) return;
+
+  // Check if user is authenticated with their phone number natively
+  const activeUser = localStorage.getItem('userLoggedInPhone');
+  
+  if (!activeUser) {
+    alert("To proceed with checking out your cart, please log in with your mobile number first.");
+    // Close the cart drawer overlay cleanly
+    toggleCart();
+    // Redirect to home page and request an instant login modal trigger
+    window.location.href = "index.html?triggerLogin=true";
+    return; // Kill execution
+  }
+
   toggleCart();
   openCartCheckoutModal();
 }
