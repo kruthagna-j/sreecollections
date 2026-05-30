@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sree Collections – Premium Gift Shop in Kurnool</title>
@@ -318,15 +319,17 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="./collections.html" onclick="toggleMenu()">Collections</a>
-  <a href="javascript:void(0)" onclick="toggleMenu(); handleProtectedFeature('#myOrders')">My Orders</a>
-  <a href="#about" onclick="toggleMenu()">About</a>
-  <a href="#reviews" onclick="toggleMenu()">Reviews</a>
-  <a href="tel:+917207186844" onclick="toggleMenu()">Contact</a>
-  <a href="#contact" onclick="toggleMenu()">Visit Our Store</a>
+  <a href="./collections.html" onclick="toggleMenu()">🛍️ Collections</a>
+  <a href="javascript:void(0)" onclick="toggleMenu(); handleProtectedFeature('#myOrders')">📦 My Orders</a>
+  <a href="my-orders.html" onclick="toggleMenu()">🔍 Track Order</a>
+  <a href="#about" onclick="toggleMenu()">ℹ️ About</a>
+  <a href="#reviews" onclick="toggleMenu()">⭐ Reviews</a>
+  <a href="tel:+917207186844" onclick="toggleMenu()">📞 Call Us</a>
+  <a href="https://wa.me/917207186844" target="_blank" onclick="toggleMenu()">💬 WhatsApp</a>
+  <a href="#contact" onclick="toggleMenu()">📍 Visit Our Store</a>
   <div id="mobileAuthLink"><a href="javascript:void(0)" onclick="toggleMenu(); openAuthModal();">👤 Login / Sign Up</a></div>
-  <a href="./collections.html" style="color:var(--gold);font-weight:600">🛍️ Shop Now</a>
-  <a href="javascript:void(0)" onclick="toggleMenu(); handleProtectedFeature('admin-login.html', true)" style="color:var(--muted);font-size:0.8rem">Admin Login</a>
+  <a href="./collections.html" style="color:var(--gold);font-weight:600;border-top:1px solid var(--border);margin-top:0.5rem;padding-top:0.8rem">🎁 Shop Now</a>
+  <a href="javascript:void(0)" onclick="toggleMenu(); handleProtectedFeature('admin-login.html', true)" style="color:var(--muted);font-size:0.78rem">🔑 Admin Login</a>
 </div>
 
 <section class="hero">
@@ -473,6 +476,7 @@ document.getElementById('pinInput')?.addEventListener('keydown', e => { if(e.key
 </section>
 
 <script>
+  emailjs.init('9fGahlws55ZA4Hq9S');
 const SUPABASE_URL = 'https://peqqtfvypljvgcorddbn.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlcXF0ZnZ5cGxqdmdjb3JkZGJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNDU1OTAsImV4cCI6MjA5NDgyMTU5MH0.J364P7n9HazV0F8Bd9o_OKBsfKbfLAbW1vCRjIflLtE';
 
