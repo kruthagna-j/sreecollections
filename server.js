@@ -6,8 +6,6 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
-  if (req.body.action === 'sendPush') {
   const { title, message, url } = req.body;
   await fetch('https://onesignal.com/api/v1/notifications', {
     method: 'POST',
@@ -29,7 +27,7 @@ module.exports = async function handler(req, res) {
   if (req.headers['x-admin-secret'] !== ADMIN_SECRET) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
-
+if (req.body.action === 'sendPush') {
   const { method, table, filter, body } = req.body;
 
   const allowedTables = ['orders', 'products', 'coupons', 'returns', 'reviews'];
