@@ -168,13 +168,8 @@ async function loadProduct() {
     </div>
   `;
 
-  // Store product for buy now
   window.currentProductData = p;
-
-  // Load reviews
   loadReviews(p.id);
-
-  // Load related
   loadRelated(p.category, p.id);
 }
 
@@ -188,7 +183,8 @@ async function loadReviews(productId) {
     <div class="review-card">
       <div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
       ${r.review ? `<div class="review-text">"${r.review}"</div>` : ''}
-<div class="reviewer-name">${r.customer_name.charAt(0)}*** · ${new Date(r.created_at).toLocaleDateString('en-IN', {month:'long', year:'numeric'})}</div>    </div>
+      <div class="reviewer-name">${r.customer_name.charAt(0)}*** · ${new Date(r.created_at).toLocaleDateString('en-IN', {month:'long', year:'numeric'})}</div>
+    </div>
   `).join('');
 }
 
@@ -215,7 +211,8 @@ async function loadRelated(category, currentId) {
 function buyNow() {
   const p = window.currentProductData;
   if (!p) return;
-  window.location.href = `collections.html?buyNow=${p.id}`;
+  // FIX: added &autoOrder=1 so collections.html actually auto-opens the order modal
+  window.location.href = `collections.html?buyNow=${p.id}&autoOrder=1`;
 }
 
 function addToCartAndGo() {

@@ -100,6 +100,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:fl
     <h2>Write a Review</h2>
     <input type="hidden" id="reviewOrderId">
     <input type="hidden" id="reviewProductId">
+    <input type="hidden" id="reviewCustomerName">
     <div class="form-group">
       <label>Your Rating *</label>
       <div class="stars-input" id="starsInput">
@@ -144,19 +145,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:fl
   </div>
 </div>
 
-
 <script>
-
-// ENTER KEY SUPPORT
 function enableEnter(inputId, callback) {
   const el = document.getElementById(inputId);
-
   if (!el) return;
-
   el.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      callback();
-    }
+    if (e.key === 'Enter') { callback(); }
   });
 }
 
@@ -165,6 +159,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 let selectedRating = 0;
 let currentPhone = '';
+let loadedOrders = [];
 
 async function sbFetch(method, table, body, filter) {
   let url = `${SUPABASE_URL}/rest/v1/${table}`;
@@ -186,18 +181,19 @@ async function loadOrders() {
   const clean = phone.replace(/\s/g, '').replace(/^(\+91|91|0)/, '');
   if (!/^[6-9]\d{9}$/.test(clean)) { alert('Please enter a valid 10-digit Indian mobile number.'); return; }
   currentPhone = phone;
-const searchPhone = '+91' + clean;
-const orders1 = await sbFetch('GET', 'orders', null, `customer_phone=eq.${encodeURIComponent(clean)}&order=created_at.desc`);
-const orders2 = await sbFetch('GET', 'orders', null, `customer_phone=eq.${encodeURIComponent(searchPhone)}&order=created_at.desc`);
-const merged = [...(orders1 || []), ...(orders2 || [])];
-const orders = merged.filter((o, i, self) => i === self.findIndex(x => x.id === o.id));
+  const searchPhone = '+91' + clean;
+  const orders1 = await sbFetch('GET', 'orders', null, `customer_phone=eq.${encodeURIComponent(clean)}&order=created_at.desc`);
+  const orders2 = await sbFetch('GET', 'orders', null, `customer_phone=eq.${encodeURIComponent(searchPhone)}&order=created_at.desc`);
+  const merged = [...(orders1 || []), ...(orders2 || [])];
+  const orders = merged.filter((o, i, self) => i === self.findIndex(x => x.id === o.id));
+  loadedOrders = orders;
   if (!orders || orders.length === 0) {
     el.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i><p>No orders found for this number.</p><a href="collections.html" style="color:var(--gold);margin-top:1rem;display:inline-block">Start Shopping →</a></div>';
     return;
   }
   const returns1 = await sbFetch('GET', 'returns', null, `customer_phone=eq.${encodeURIComponent(clean)}`);
-const returns2 = await sbFetch('GET', 'returns', null, `customer_phone=eq.${encodeURIComponent(searchPhone)}`);
-const returns = [...(returns1 || []), ...(returns2 || [])];
+  const returns2 = await sbFetch('GET', 'returns', null, `customer_phone=eq.${encodeURIComponent(searchPhone)}`);
+  const returns = [...(returns1 || []), ...(returns2 || [])];
   const returnedOrderIds = returns ? returns.map(r => r.order_id) : [];
   el.innerHTML = orders.map(o => renderOrder(o, returnedOrderIds)).join('');
 }
@@ -266,7 +262,7 @@ function renderOrder(o, returnedOrderIds) {
 
       <div class="order-actions">
         ${canCancel ? `<button class="btn-action btn-cancel" onclick="cancelOrder('${o.id}')"><i class="fas fa-times"></i> Cancel Order</button>` : ''}
-        ${canReview ? `<button class="btn-action btn-review" onclick="openReview('${o.id}','${o.product_id}')"><i class="fas fa-star"></i> Write Review</button>` : ''}
+        ${canReview ? `<button class="btn-action btn-review" onclick="openReview('${o.id}','${o.product_id}','${(o.customer_name||'').replace(/'/g,"\\'")}')"><i class="fas fa-star"></i> Write Review</button>` : ''}
         ${canReturn ? `<button class="btn-action" style="border-color:var(--gold);color:var(--gold)" onclick="openReturn('${o.id}')"><i class="fas fa-undo"></i> Return / Refund</button>` : ''}
         ${hasReturn ? `<span class="badge return-badge"><i class="fas fa-check"></i> Return Requested</span>` : ''}
         <button class="btn-action" onclick="reorder('${o.product_id}')"><i class="fas fa-redo"></i> Reorder</button>
@@ -286,9 +282,11 @@ function reorder(productId) {
   window.location.href = `collections.html?buyNow=${productId}&autoOrder=1`;
 }
 
-function openReview(orderId, productId) {
+function openReview(orderId, productId, customerName) {
   document.getElementById('reviewOrderId').value = orderId;
   document.getElementById('reviewProductId').value = productId;
+  // FIX: store the actual customer name so reviews don't show a phone number
+  document.getElementById('reviewCustomerName').value = customerName || 'Customer';
   document.getElementById('reviewText').value = '';
   selectedRating = 0;
   setRating(0);
@@ -306,6 +304,14 @@ function closeModal(id) {
   document.getElementById(id).classList.remove('active');
 }
 
+// FIX: Escape key closes review and return modals
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeModal('reviewModal');
+    closeModal('returnModal');
+  }
+});
+
 function setRating(r) {
   selectedRating = r;
   document.querySelectorAll('#starsInput span').forEach((s,i) => {
@@ -317,10 +323,12 @@ async function submitReview() {
   if (!selectedRating) { alert('Please select a rating'); return; }
   const phone = document.getElementById('phoneInput').value.trim();
   const clean = phone.replace(/\s/g, '').replace(/^(\+91|91|0)/, '');
+  // FIX: use the stored customer name from the order, not the phone number
+  const customerName = document.getElementById('reviewCustomerName').value || 'Customer';
   const data = {
     order_id: document.getElementById('reviewOrderId').value,
     product_id: document.getElementById('reviewProductId').value,
-    customer_name: currentPhone || 'Customer',
+    customer_name: customerName,
     customer_phone: '+91' + clean,
     rating: selectedRating,
     review: document.getElementById('reviewText').value.trim() || null
