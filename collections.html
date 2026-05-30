@@ -689,24 +689,16 @@ async function sbFetch(method, table, body, filter) {
       </div>
     `).join('');
   }
-  const ONESIGNAL_APP_ID = '20b46cc0-1f20-4482-9879-f258a7234c13';
-const ONESIGNAL_REST_KEY = 'os_v2_app_ec2gzqa7ebcifgdz6jmkoi2mco226yl6kpnud35xhkydeyl7hi2tmwyfrwxEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf'; // get this from OneSignal Settings → Keys & IDs
-
+  
 async function sendPushToAll(title, message, url = '/') {
   try {
-    await fetch('https://onesignal.com/api/v1/notifications', {
+    await fetch('/api/server', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${ONESIGNAL_REST_KEY}`
+        'x-admin-secret': 'sree-admin-2024-secret'
       },
-      body: JSON.stringify({
-        app_id: ONESIGNAL_APP_ID,
-        included_segments: ['Total Subscriptions'],
-        headings: { en: title },
-        contents: { en: message },
-        url: `https://sreecollectionsknl.vercel.app${url}`
-      })
+      body: JSON.stringify({ action: 'sendPush', title, message, url })
     });
   } catch(e) { console.error('Push error:', e); }
 }
