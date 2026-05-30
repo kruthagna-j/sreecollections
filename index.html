@@ -246,7 +246,6 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:3re
 </script>
 </head>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
@@ -720,11 +719,7 @@ async function handleVerifyLoginOTP() {
       alert('Invalid OTP. Please try again.');
     }
   } catch(e) {
-    if (otp === "123456" || otp.length === 6) {
-      executeLoginSuccess(formattedPhone);
-    } else {
-      alert('Invalid OTP. Try entering 123456 for manual testing.');
-    }
+    alert('Could not verify OTP. Please check your connection and try again.');
   }
 }
 

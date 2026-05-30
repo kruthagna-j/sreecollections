@@ -164,6 +164,18 @@
   .btn-invoice{padding:0.8rem 1.5rem;background:var(--gold);color:var(--dark);border:none;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;display:flex;align-items:center;gap:0.4rem}
   .btn-done{padding:0.8rem 1.5rem;background:transparent;color:var(--muted);border:1px solid var(--border);font-size:0.85rem;cursor:pointer;font-family:'Manrope',sans-serif}
   .email-status{font-size:0.78rem;color:var(--muted);margin-top:0.8rem;min-height:20px}
+  .auth-modal-overlay{position:fixed!important;top:0!important;left:0!important;width:100vw!important;height:100vh!important;background:rgba(10,10,10,0.85);backdrop-filter:blur(8px);z-index:99999!important;display:flex!important;align-items:center!important;justify-content:center!important;opacity:0;pointer-events:none;transition:opacity 0.4s ease}
+.auth-modal-overlay.active{opacity:1;pointer-events:auto}
+.auth-modal-card{background:#161616;border:1px solid rgba(200,169,107,0.25);padding:2.5rem 2rem;width:100%;max-width:420px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.5);position:relative}
+.auth-modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;transition:color 0.2s}
+.auth-modal-close:hover{color:var(--gold)}
+.auth-input-group{text-align:left;margin-bottom:1.5rem}
+.auth-input-label{display:block;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:0.5rem}
+.auth-field-wrapper{display:flex;align-items:center;background:#222;border:1px solid rgba(200,169,107,0.15)}
+.auth-prefix{padding:0.8rem 0.5rem 0.8rem 1rem;color:var(--muted);font-size:0.95rem;font-weight:600}
+.auth-input{background:none;border:none;outline:none;padding:0.8rem 1rem 0.8rem 0.2rem;color:#fff;font-size:0.95rem;width:100%;font-family:inherit}
+.auth-submit-btn{width:100%;background:var(--gold);color:#000;border:none;padding:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;font-size:0.85rem;cursor:pointer;transition:background 0.2s;margin-top:0.5rem}
+.auth-submit-btn:hover{background:var(--gold-light)}
   @media(max-width:600px){.payment-methods{grid-template-columns:1fr}.modal{padding:1.5rem}}
   </style>
   <!-- Google Analytics -->
@@ -175,8 +187,42 @@
   gtag('config', 'G-J8KF1GD5ZB');
 </script>
   </head>
-  <body>
-  <nav>
+<body>
+
+<!-- AUTH MODAL -->
+<div class="auth-modal-overlay" id="globalAuthModal">
+  <div class="auth-modal-card">
+    <button class="auth-modal-close" onclick="closeAuthModal()">✕</button>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);margin-bottom:0.5rem">Welcome Back</h3>
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1.5rem">Verify your mobile number to place your order.</p>
+
+    <div id="authPhoneView">
+      <div class="auth-input-group">
+        <label class="auth-input-label">Mobile Number</label>
+        <div class="auth-field-wrapper">
+          <span class="auth-prefix">+91</span>
+          <input type="tel" id="globalAuthPhone" placeholder="Enter 10-digit number" maxlength="10" class="auth-input">
+        </div>
+      </div>
+      <button class="auth-submit-btn" onclick="handleSendLoginOTP()">Continue</button>
+    </div>
+
+    <div id="authOtpView" style="display:none">
+      <div class="auth-input-group">
+        <label class="auth-input-label">Verification Code</label>
+        <p style="font-size:0.8rem;margin-bottom:0.8rem;color:var(--muted)">Sent to <span id="displayLoginPhone" style="color:var(--text);font-weight:600"></span></p>
+        <input type="text" id="globalAuthOtp" placeholder="Enter 6-digit code" maxlength="6" class="auth-input" style="border:1px solid rgba(200,169,107,0.15);padding:0.8rem;width:100%;letter-spacing:6px;text-align:center;background:#222;color:#fff;font-family:inherit">
+      </div>
+      <button class="auth-submit-btn" onclick="handleVerifyLoginOTP()">Verify & Continue</button>
+      <div style="font-size:0.8rem;color:var(--muted);text-align:center;margin-top:0.8rem">
+        <span id="loginTimerText">Resend code in 30s</span>
+        <span id="loginResendBtn" onclick="handleSendLoginOTP()" style="display:none;color:var(--gold);cursor:pointer;font-weight:700;text-decoration:underline">Resend OTP</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav>
     <a href="index.html" class="logo">Sree Collections</a>
     <div style="display:flex;align-items:center;gap:1.5rem">
       <a href="my-orders.html" class="nav-back"><i class="fas fa-box"></i> My Orders</a>
@@ -727,21 +773,16 @@ function resetPrice() {
   applyFiltersAndSort();
 }
 
-  function openOrder(product) {
-
-  // Check if user is authenticated with their phone number natively
+function openOrder(product) {
   const activeUser = localStorage.getItem('userLoggedInPhone');
   if (!activeUser) {
-    alert("To order items, please log in with your mobile number first.");
-
-
-    // Redirect to home page and request an instant login modal trigger
-    window.location.href = "index.html?triggerLogin=true";
-    return; // Kill execution so the purchase forms don't open
+    openAuthModal(product);
+    return;
   }
 
   // Existing operational checkout logic continues normally below
   currentProduct = product;
+  trackRecentlyViewed(product);
   currentQty = 1;
   currentPayment = 'cod';
   emailVerified = false;
@@ -1255,23 +1296,16 @@ function toggleCart() {
 }
 function checkoutCart() {
   if (cart.length === 0) return;
-
-  // Check if user is authenticated with their phone number natively
   const activeUser = localStorage.getItem('userLoggedInPhone');
-  
   if (!activeUser) {
-    alert("To proceed with checking out your cart, please log in with your mobile number first.");
-    // Close the cart drawer overlay cleanly
     toggleCart();
-    // Redirect to home page and request an instant login modal trigger
-    window.location.href = "index.html?triggerLogin=true";
-    return; // Kill execution
+    openAuthModal(null);
+    pendingProduct = 'cart';
+    return;
   }
-
   toggleCart();
   openCartCheckoutModal();
 }
-
 function openCartCheckoutModal() {
   const total = cart.reduce((sum, i) => sum + (Number(i.price) * i.qty), 0);
   document.getElementById('cartCheckoutItems').innerHTML = cart.map(i => `
@@ -1439,6 +1473,113 @@ const cartTotalAmt = cart.reduce((s, i) => s + (Number(i.price) * i.qty), 0) + d
       if (drawer.style.display === 'block') toggleCart();
     }
   });
+
+// AUTH MODAL
+let authCountdown;
+let pendingProduct = null;
+let authModalKeyboardHandler = null;
+
+function openAuthModal(product = null) {
+  pendingProduct = product;
+  const modal = document.getElementById('globalAuthModal');
+  modal.classList.add('active');
+  document.getElementById('authPhoneView').style.display = 'block';
+  document.getElementById('authOtpView').style.display = 'none';
+  const phoneField = document.getElementById('globalAuthPhone');
+  if (phoneField) { phoneField.value = ''; setTimeout(() => phoneField.focus(), 60); }
+  authModalKeyboardHandler = function(e) {
+    if (e.key === 'Escape') closeAuthModal();
+    else if (e.key === 'Enter') {
+      e.preventDefault();
+      const isOtp = document.getElementById('authOtpView').style.display === 'block';
+      if (isOtp) handleVerifyLoginOTP(); else handleSendLoginOTP();
+    }
+  };
+  window.addEventListener('keydown', authModalKeyboardHandler);
+}
+
+function closeAuthModal() {
+  document.getElementById('globalAuthModal').classList.remove('active');
+  clearInterval(authCountdown);
+  if (authModalKeyboardHandler) {
+    window.removeEventListener('keydown', authModalKeyboardHandler);
+    authModalKeyboardHandler = null;
+  }
+}
+
+async function handleSendLoginOTP() {
+  const phone = document.getElementById('globalAuthPhone').value.trim();
+  const clean = phone.replace(/\s/g, '').replace(/^(\+91|91|0)/, '');
+  if (!/^[6-9]\d{9}$/.test(clean)) { alert('Please enter a valid 10-digit mobile number.'); return; }
+  const formattedPhone = '+91' + clean;
+  document.getElementById('displayLoginPhone').innerText = formattedPhone;
+  try {
+    const response = await fetch('/api/auth/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phoneNumber: formattedPhone })
+    });
+    const data = await response.json();
+    if (!data.success) { alert('Error sending OTP: ' + data.message); return; }
+  } catch(e) {
+    console.log('OTP API not available, proceeding to OTP view');
+  }
+  document.getElementById('authPhoneView').style.display = 'none';
+  document.getElementById('authOtpView').style.display = 'block';
+  startAuthTimer();
+}
+
+function startAuthTimer() {
+  let time = 30;
+  document.getElementById('loginResendBtn').style.display = 'none';
+  document.getElementById('loginTimerText').style.display = 'inline';
+  document.getElementById('loginTimerText').innerText = `Resend code in ${time}s`;
+  clearInterval(authCountdown);
+  authCountdown = setInterval(() => {
+    time--;
+    document.getElementById('loginTimerText').innerText = `Resend code in ${time}s`;
+    if (time <= 0) {
+      clearInterval(authCountdown);
+      document.getElementById('loginTimerText').style.display = 'none';
+      document.getElementById('loginResendBtn').style.display = 'inline';
+    }
+  }, 1000);
+}
+
+async function handleVerifyLoginOTP() {
+  const phone = document.getElementById('globalAuthPhone').value.trim();
+  const clean = phone.replace(/\s/g, '').replace(/^(\+91|91|0)/, '');
+  const formattedPhone = '+91' + clean;
+  const otp = document.getElementById('globalAuthOtp').value.trim();
+  if (otp.length < 6) { alert('Please enter the 6-digit code.'); return; }
+  try {
+    const response = await fetch('/api/auth/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phoneNumber: formattedPhone, otp })
+    });
+    const data = await response.json();
+    if (data.success) { executeLoginSuccess(formattedPhone); return; }
+    else { alert('Invalid OTP. Please try again.'); return; }
+  } catch(e) {
+    alert('Could not verify OTP. Please check your connection and try again.');
+  }
+}
+
+function executeLoginSuccess(phone) {
+  localStorage.setItem('userLoggedInPhone', phone);
+  closeAuthModal();
+  const custPhone = document.getElementById('custPhone');
+  if (custPhone) custPhone.value = phone.replace('+91', '');
+  if (pendingProduct === 'cart') {
+    pendingProduct = null;
+    openCartCheckoutModal();
+  } else if (pendingProduct) {
+    const p = pendingProduct;
+    pendingProduct = null;
+    openOrder(p);
+  }
+}
 
 function shareOnWhatsApp(name, price) {
   const msg = `🎁 Check out this amazing gift at Sree Collections, Kurnool!\n\n*${name}* — ₹${Number(price).toLocaleString('en-IN')}\n\nOrder now: https://sreecollections.vercel.app/collections.html`;

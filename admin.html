@@ -149,7 +149,6 @@ body {
 <div class="header">
 <div class="logo">Sree Collections Admin</div>
 <div class="header-actions">
-<div class="header-actions">
 <a href="index.html" class="btn" target="_blank"><i class="fas fa-store"></i> Visit Store</a>
 
 <button class="btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
@@ -344,6 +343,8 @@ body {
 <div class="section-header">
 <h2 class="section-title">Products</h2>
 <button class="btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Add Product</button>
+</div>
+
 <!-- PRODUCT MODAL -->
 <div class="modal" id="productModal">
 <div class="modal-content">
@@ -396,7 +397,6 @@ body {
 <button type="submit" class="btn-primary" style="flex:1">Save Product</button>
 </div>
 </form>
-</div>
 </div>
 </div>
 <div class="table-container">
@@ -513,45 +513,6 @@ const ONESIGNAL_APP_ID = '20b46cc0-1f20-4482-9879-f258a7234c13';
 // 2. LOAD CONFIDENTIAL API KEY FROM VOLATILE BROWSER STORAGE
 let ONESIGNAL_REST_KEY = sessionStorage.getItem('admin_onesignal_rest_key');
 
-// 3. MASTER RUNTIME GATEWAY GUARD VERIFICATION
-function verifyAdminSessionGate() {
-  const activeSessionPhone = localStorage.getItem('userLoggedInPhone');
-
-  // If you logged in from the main index.html page already:
-  if (activeSessionPhone === "+919999999999" && ONESIGNAL_REST_KEY) {
-    console.log("Session clearance confirmed: Admin parameters active.");
-    return; 
-  }
-
-  // Fallback prompt mechanism if you opened admin.html directly
-  const phoneCheck = prompt("Enter Admin Access Identification Line:");
-  
-  if (phoneCheck === "9999999999") {
-    const passwordCheck = prompt("Enter Admin Security Verification Password:");
-    
-    if (passwordCheck === "sreecollections@knl") {
-      const restKeyCheck = prompt("Provide OneSignal REST API Master Authorization Token Key:");
-      
-      if (restKeyCheck) {
-        // Save to browser memory so you don't have to re-type it during this session
-        localStorage.setItem('userLoggedInPhone', '+919999999999');
-        sessionStorage.setItem('admin_onesignal_rest_key', restKeyCheck.trim());
-        ONESIGNAL_REST_KEY = restKeyCheck.trim();
-        
-        alert("Session verification cleared successfully.");
-        window.location.reload(); 
-        return;
-      }
-    }
-  }
-  
-  // If entry details are wrong, boot them out to safety
-  alert("Authorization Failure: Valid system authentication token parameters are absent.");
-  window.location.href = "index.html?triggerLogin=true";
-}
-
-// Automatically enforce checking when the dashboard structure loads
-document.addEventListener('DOMContentLoaded', verifyAdminSessionGate);
 async function sendPushToAll(title, message, url = '/') {
   try {
     await fetch('https://onesignal.com/api/v1/notifications', {
@@ -587,22 +548,25 @@ function logout() {
 }
 
 async function sbFetch(method, table, body, filter) {
+  let url = `${SUPABASE_URL}/rest/v1/${table}`;
+  if (filter) url += `?${filter}`;
   try {
-    const res = await fetch('/api/server', {
-      method: 'POST',
+    const res = await fetch(url, {
+      method,
       headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
         'Content-Type': 'application/json',
-        'x-admin-secret': ADMIN_SECRET
+        'Prefer': method === 'POST' ? 'return=representation' : ''
       },
-      body: JSON.stringify({ method, table, body, filter })
+      body: body ? JSON.stringify(body) : undefined
     });
-    if (res.status === 204) return [];
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const text = await res.text();
     return text ? JSON.parse(text) : [];
   } catch(e) {
-    console.error('API error:', e);
-    alert('Error: ' + e.message);
+    console.error('Supabase error:', e);
+    alert('Database error: ' + e.message);
     return null;
   }
 }
@@ -1398,6 +1362,39 @@ startOrderPolling();
 </script>
 
 <script>
+async function loadReturns() {
+  const returns = await sbFetch('GET', 'returns', null, 'order=created_at.desc');
+  const tbody = document.getElementById('returnsBody');
+  if (!returns || returns.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><i class="fas fa-undo"></i><p>No return requests yet.</p></div></td></tr>';
+    return;
+  }
+  const reasonLabels = {damaged:'Arrived Damaged',wrong_item:'Wrong Item',not_as_described:'Not as Described',quality:'Quality Issue',changed_mind:'Changed Mind',other:'Other'};
+  tbody.innerHTML = returns.map(r => `
+    <tr>
+      <td><strong>#${r.order_id?.toString().substring(0,8).toUpperCase()}</strong></td>
+      <td>${r.customer_name}</td>
+      <td>${r.customer_phone}</td>
+      <td>${reasonLabels[r.reason] || r.reason}</td>
+      <td>${r.description || '—'}</td>
+      <td>
+        <select onchange="updateReturnStatus('${r.id}', this.value)" style="background:var(--dark);border:1px solid var(--border);color:var(--text);padding:0.3rem;font-family:'Manrope',sans-serif;font-size:0.8rem">
+          <option value="pending" ${r.status==='pending'?'selected':''}>Pending</option>
+          <option value="approved" ${r.status==='approved'?'selected':''}>Approved</option>
+          <option value="rejected" ${r.status==='rejected'?'selected':''}>Rejected</option>
+          <option value="completed" ${r.status==='completed'?'selected':''}>Completed</option>
+        </select>
+      </td>
+      <td>${new Date(r.created_at).toLocaleDateString('en-IN')}</td>
+      <td><a href="https://wa.me/${r.customer_phone.replace('+','')}" target="_blank" class="btn-small"><i class="fab fa-whatsapp"></i> Contact</a></td>
+    </tr>
+  `).join('');
+}
+
+async function updateReturnStatus(id, status) {
+  await sbFetch('PATCH', 'returns', {status}, `id=eq.${id}`);
+  showToast('Return status updated');
+}
 
 function setTheme(isLight) {
   document.body.classList.toggle('light-mode', isLight);

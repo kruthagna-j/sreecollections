@@ -320,7 +320,7 @@ async function submitReview() {
   const data = {
     order_id: document.getElementById('reviewOrderId').value,
     product_id: document.getElementById('reviewProductId').value,
-    customer_name: 'Customer',
+    customer_name: currentPhone || 'Customer',
     customer_phone: '+91' + clean,
     rating: selectedRating,
     review: document.getElementById('reviewText').value.trim() || null
