@@ -655,6 +655,9 @@ async function handleSendLoginOTP() {
   const phone = document.getElementById('globalAuthPhone').value.trim();
   const email = document.getElementById('globalAuthEmail').value.trim();
   const clean = phone.replace(/\s/g, '').replace(/^(\+91|91|0)/, '');
+  if (!/^[6-9]\d{9}$/.test(clean)) {
+    alert('Please enter a valid 10-digit mobile number.');
+    return;
   }
   if (!email || !email.includes('@')) {
     alert('Please enter a valid email address.');
@@ -677,6 +680,7 @@ async function handleSendLoginOTP() {
   } catch(e) {
     alert('Could not send verification code. Please try again.');
   }
+}
 function startAuthTimer() {
   let time = 30;
   document.getElementById('loginResendBtn').style.display = 'none';
